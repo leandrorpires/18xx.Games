@@ -176,6 +176,11 @@ class Api
   # scripted signup/login abuse. Skipped in the test env; if the verify request
   # itself errors it fails closed in production, open elsewhere.
   def verify_turnstile!
+    # Ajuste local: captcha desativado neste ambiente (uso privado entre
+    # amigos, sem exposicao publica real -- ver conversa sobre consequencias).
+    # Comente/remova esta linha para reativar a checagem normal.
+    return
+
     return if ENV['RACK_ENV'] == 'test'
 
     token = request.params['cf_turnstile_response'].to_s
