@@ -46,6 +46,28 @@ module Engine
           },
         }.freeze
 
+        LOCATION_NAMES_2P = {
+          'L6' => 'Monterrey',
+          'G7' => 'Valle Verde',
+          'F10' => 'San Isidro',
+          'A13' => 'Navidad',
+          'D6' => 'Don Ramón',
+          'I3' => 'San Miguel',
+          'L12' => 'Puerto Viejo',
+          'E11' => 'Laguna',
+          'A2' => 'NEUTRO',
+        }.freeze
+
+        PARAMILITAR_HEXES_2P = %w[B14 C11 E7 G3 G13 I9 J4 K11 L8].freeze
+
+        DITADURA_BORDER_TILES_2P = {
+          'A13' => 'offboard=revenue:80;path=a:4,b:_0;path=a:5,b:_0', # Navidad
+          'D6' => 'offboard=revenue:50;path=a:0,b:_0;path=a:4,b:_0;path=a:5,b:_0', # Don Ramón
+          'L12' => 'offboard=revenue:40;path=a:1,b:_0;path=a:2,b:_0;path=a:3,b:_0', # Puerto Viejo
+          'I3' => 'offboard=revenue:50;path=a:0,b:_0;path=a:1,b:_0;path=a:5,b:_0', # San Miguel
+        }.freeze
+
+
 
 
 

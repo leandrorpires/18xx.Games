@@ -33,6 +33,12 @@ module Engine
           two_player? ? Map2P::HEXES_2P : game_hexes
         end
 
+        # Sugestao Claude - nomes de local (Don Ramon/San Miguel) mudam de
+        # coordenada no mapa de 2 jogadores (map_2p.rb).
+        def location_name(coord)
+          two_player? ? Map2P::LOCATION_NAMES_2P[coord] : self.class::LOCATION_NAMES[coord]
+        end
+
         CURRENCY_FORMAT_STR = '$%s'
 
         BANK_CASH = 4_000   #7_0000
@@ -791,7 +797,8 @@ module Engine
         # EFEITOS DIRETOS (ver log_direct_effects_ditadura!), evitando
         # repetição com a lista detalhada que aparecia em DEMAIS EFEITOS.
         def replace_border_hexes_for_ditadura!
-          self.class::DITADURA_BORDER_TILES.each do |hex_id, code|
+          border_tiles = two_player? ? Map2P::DITADURA_BORDER_TILES_2P : self.class::DITADURA_BORDER_TILES
+          border_tiles.each do |hex_id, code|
             hex = hex_by_id(hex_id)
             next unless hex
 
@@ -957,7 +964,7 @@ module Engine
           @political_track = 0
           @corporation_alignment = Hash.new { |h, k| h[k] = { civil: 0, militar: 0 } }
           @initial_alignment_applied_to_track = {}
-          @paramilitar_hexes_remaining = self.class::PARAMILITAR_HEXES.dup
+          @paramilitar_hexes_remaining = (two_player? ? Map2P::PARAMILITAR_HEXES_2P : self.class::PARAMILITAR_HEXES).dup
           @pending_paramilitar_choice = nil
           @pending_paramilitar_hex = nil
 
