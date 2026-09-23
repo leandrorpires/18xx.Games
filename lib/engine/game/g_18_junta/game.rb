@@ -2,6 +2,7 @@
 
 require_relative 'entities'
 require_relative 'map'
+require_relative 'map_2p'
 require_relative 'meta'
 require_relative 'step/coup_private_i_choice'
 require_relative 'step/dividend'
@@ -24,6 +25,13 @@ module Engine
         include_meta(G18Junta::Meta)
         include Entities
         include Map
+
+        # Sugestao Claude - mapa reduzido (verso do tabuleiro) para
+        # partidas de 2 jogadores, definido em map_2p.rb (HEXES_2P),
+        # copia independente de HEXES (nao derivada automaticamente).
+        def optional_hexes
+          two_player? ? Map2P::HEXES_2P : game_hexes
+        end
 
         CURRENCY_FORMAT_STR = '$%s'
 
@@ -118,9 +126,9 @@ module Engine
         # Democracia vencer — a pilha perdedora é removida do depot em
         # resolve_coup_attempt! quando a Tentativa de Golpe é resolvida.
         TRAINS = [
-          { name: '2', distance: 2, price: 80, rusts_on: '4', num: 2 },
-          { name: '3', distance: 3, price: 180, rusts_on: '6', num: 2 },
-          { name: '4', distance: 4, price: 300, rusts_on: %w[8 D], num: 2 },
+          { name: '2', distance: 2, price: 80, rusts_on: '4', num: 6 },
+          { name: '3', distance: 3, price: 180, rusts_on: '6', num: 5 },
+          { name: '4', distance: 4, price: 300, rusts_on: %w[8 D], num: 4 },
           { name: '5', distance: 5, price: 450, num: 3 },
           { name: '6', distance: 6, price: 630, num: 2 },
           {
