@@ -1362,15 +1362,24 @@ status << ["Militar x#{alignment[:militar]}", 'militar_support'] if alignment[:m
           new_train = @depot.min_depot_train
           return unless new_train
 
+          # Sugestao Claude - a troca so e permitida por um trem
+          # estritamente mais caro que o descartado (trava de seguranca;
+          # a lista de opcoes em special_choose.rb ja filtra isso antes,
+          # mas mantemos aqui tambem para nunca depender so da UI).
+          raise GameError, 'AVISO: A troca só é possível por um trem de maior valor que o trem descartado!' unless new_train.price > old_train.price
+
           final_price = [new_train.price - old_train.price, 0].max
-          return if final_price >= new_train.price
 
           @private_d_used = true
 
           corporation.trains.delete(old_train)
           @depot.forget_train(old_train)
 
-          buy_train(corporation, new_train, final_price)
+          # Correcao do Ferdnandoc (PR #10, commit b53ee1bd2): trocar por um
+          # trem de MESMO valor gerava final_price = 0, quebrando em
+          # Spender#spend(0). Agora compra como :free quando o preco final
+          # nao for positivo.
+          buy_train(corporation, new_train, final_price.positive? ? final_price : :free)
 
           @log << "#{corporation.name} descarta um trem #{old_train.name} e compra um #{new_train.name} por "\
                   "#{format_currency(final_price)} (privada (D) Ferramenteria Ochoa)"

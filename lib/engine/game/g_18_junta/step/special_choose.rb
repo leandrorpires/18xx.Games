@@ -30,9 +30,12 @@ module Engine
               return {} unless target
 
               discardable_trains(corporation).to_h do |old_train|
-                final_price = [target.price - old_train.price, 0].max
-                next [old_train.id, nil] if final_price >= target.price
+                # Sugestao Claude - a troca so vale se o trem novo for
+                # estritamente mais caro que o descartado (nao apenas
+                # igual ou menor).
+                next [old_train.id, nil] unless target.price > old_train.price
 
+                final_price = [target.price - old_train.price, 0].max
                 [old_train.id, "Descartar #{old_train.name} para comprar #{target.name} por "\
                                 "#{@game.format_currency(final_price)} (em vez de "\
                                 "#{@game.format_currency(target.price)})"]

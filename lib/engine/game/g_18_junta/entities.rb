@@ -55,8 +55,8 @@ module Engine
                 sym: '(D)',
                 value: 50,
                 revenue: 5,
-                desc: 'Uma vez por partida, na hora de comprar um trem, a companhia proprietária pode descartar um trem '\
-                      '2 ou 3, e receber o valor de custo do trem descartado como desconto na compra do trem atual, '\
+                desc: 'Uma vez por partida, na hora de comprar um trem da oferta, a companhia proprietária pode descartar um trem '\
+                      '2 ou 3, e receber o valor de custo do trem descartado como desconto na compra do trem atual de maior valor, '\
                       'pagando apenas a diferença de valor entre eles.',
                 color: nil,
                 meta: { present: false },
