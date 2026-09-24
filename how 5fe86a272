@@ -1,0 +1,992 @@
+[33m7dd1b34fe[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m18junta-base-2ec2b07[m[33m)[m Implementa mapa reduzido de 2 jogadores completo (HEXES_2P, LOCATION_NAMES_2P, PARAMILITAR_HEXES_2P, DITADURA_BORDER_TILES_2P)
+[33m8ec5dc5bd[m Completa HEXES_2P com as 10 correções do mapa de 2 jogadores
+[33md1dae8c61[m Cria estrutura para mapa reduzido de 2 jogadores (map_2p.rb, HEXES_2P vazio)
+[33mef0b2c81f[m Desativa checagem de captcha (Turnstile) - ambiente privado entre amigos
+[33m5fe86a272[m[33m ([m[1;31mfork/18junta-base-2ec2b07[m[33m)[m Remove exigência de verificação por e-mail em novos cadastros (ambiente local de testes)
+[33m9cd22d98e[m Backup antes de remover exigência de verificação por e-mail em novos cadastros (ambiente local)
+[33m58fb4b19b[m Implementa e corrige timing da privada (H) Muñoz Investimentos
+[33m6f22bb009[m Define Ⓕ como marcador de fazenda na coluna Route
+[33m94b5d062b[m Adiciona asterisco em Used quando distância excede o normal do trem (bônus de vila/fazenda)
+[33m71273de65[m Implementa privada (G): ignora hexágonos de vila no cálculo de distância
+[33m63033b43e[m Corrige erros de sintaxe em entities.rb (vírgulas faltando/duplicadas)
+[33m1d3f3911e[m Corrige bug 'use! for nil' na doação da privada (E); confirma funcionamento completo
+[33m640c85149[m Corrige bug 'use! for nil' na doação da privada (E)
+[33mbe3c97f52[m Backup antes de reimplementar a privada (E) como ability
+[33md83dce90b[m Backup antes de reimplementar a privada (E) como ability
+[33mbb756219b[m Backup: reorganização do log do golpe recuperada após desfazer acidental
+[33m53c9d99e4[m Backup antes de mudar a lógica de fichas paramilitares no lay track
+[33mfbc6cdca0[m Backup antes de transformar a privada (D) em ability
+[33m2ec2b070a[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mclaude/laughing-wright-p2r33h[m[33m)[m Merge pull request #7 from ferdnandoc/claude/determined-rubin-id677a
+[33m53bd6e929[m 18Junta: restaura arquitetura do core e corrige bugs de prioridade alta
+[33m8902eeb93[m[33m ([m[1;32mmaster[m[33m)[m Merge pull request #6 from ferdnandoc/claude/laughing-wright-p2r33h
+[33m814cab6fe[m[33m ([m[1;31morigin/claude/laughing-wright-p2r33h[m[33m)[m [core] 18Junta: mostra alinhamento civil/militar e trilha política na UI
+[33mcb6620d7e[m Corrige travamento ao construir em hexágono de paramilitar/veto/golpe
+[33ma1ddafdc5[m Merge pull request #5 from ferdnandoc/claude/laughing-wright-p2r33h
+[33mbaf3f719e[m Corrige crash ao clicar numa privada durante o leilão inicial (18Junta)
+[33md762e6faf[m Merge pull request #4 from ferdnandoc/claude/laughing-wright-p2r33h
+[33m0c3de1d83[m Corrige remoção dupla de corporação no início do jogo (18Junta)
+[33m93ef4d87d[m 18Junta: usa o RNG determinístico do jogo em vez de Array#sample/#shuffle
+[33m6324ae0a2[m Merge pull request #3 from ferdnandoc/claude/laughing-wright-p2r33h
+[33mb94b7675f[m 18Junta: seleção de privadas/corporação roda antes do leilão ser montado
+[33m1d506dc1c[m [core] Add missing :farm terrain icon for Upgrade tile part rendering
+[33m23ed6c4b6[m Merge pull request #2 from ferdnandoc/claude/laughing-wright-p2r33h
+[33m11abb3109[m 18Junta: adiciona ícone do token de paramilitar e o remove ao ser reclamado
+[33m57a65be93[m 18Junta: adiciona logos das corporações e ícone de fazenda
+[33m3518e01e6[m Merge pull request #1 from ferdnandoc/claude/laughing-wright-p2r33h
+[33m4e4737790[m 18Junta: indenização usa tabela Democracia quando o golpe não ocorreu
+[33mb6d6b7a3a[m 18Junta: indenização por corrupção no fim de jogo
+[33m2a1c21ebf[m 18Junta: substitui fronteiras por trilhos militares na Ditadura
+[33m7cfa1e968[m [18Junta] Implement simplified veto and private (I)'s coup ability
+[33m136d00065[m [18Junta] Farms don't count as route stops
+[33m914562410[m [18Junta] Fix political track Neutro handling; implement private auction
+[33mf52ec2c9e[m [18Junta] Implement Tentativa de Golpe (coup attempt)
+[33m1738f64e0[m [18Junta] Implement privates (K) and (N)
+[33mf1da981db[m [18Junta] Add corruption bag, paramilitar hexes, and political track
+[33m94d7f8ba2[m [18Junta] Add upgrade license mechanic
+[33m090f3a320[m Add 18Junta skeleton (meta, entities, map, game)
+[33m715567bdc[m Merge pull request #12834 from kepakiano/1835_implement_prussian_train_limit
+[33mfa9d240f6[m Merge pull request #12832 from kepakiano/1835_implement_distance_based_token_cost
+[33madc56298c[m Merge pull request #12842 from philcampeau/1833NE
+[33m1801a4664[m Merge branch 'master' into 1835_implement_prussian_train_limit
+[33m2307e7a47[m Merge branch 'master' into 1835_implement_distance_based_token_cost
+[33md883a1599[m [1835] skip token step if a corporation cannot afford to place a token
+[33m869af1a35[m Merge pull request #12807 from chrstas/18Cuba-FC-Train-Export
+[33m94da57e8c[m Merge pull request #12802 from chrstas/18ESP-Mountain-Pass-Performance-Fix
+[33m406f3df1b[m updates
+[33meef7401ec[m [1835] increase Preußen's train limit via the phase and not an ability
+[33m8d2f1c004[m Merge branch 'master' into 1835_implement_prussian_train_limit
+[33mf7b2ce462[m Merge pull request #12848 from kepakiano/1835_1847AE_core_pull_nationalization_into_module
+[33m73ac9a7c8[m Fix whitespace
+[33m6fa223565[m [1835] pull nationalization into its own method
+[33mf399e824a[m Merge branch 'master' into 1835_1847AE_core_pull_nationalization_into_module
+[33mde15a1d09[m [1835] split nationalization module up again
+[33m6ccad4d76[m Merge pull request #12847 from kepakiano/1835_add_tests_for_PR_conversion_corp_cert_packages_and_cert_limit
+[33m04d064aa8[m Merge branch 'master' into 1835_add_tests_for_PR_conversion_corp_cert_packages_and_cert_limit
+[33m9433ed222[m Merge pull request #12846 from kepakiano/1835_fix_handling_of_entity_index
+[33m57fdb5e39[m [1835] fix test
+[33m32d4e4c37[m [1835] fix 1835 tests
+[33m3c996564e[m [1835] split up tests
+[33md7abd79c5[m [1835] fix 1835 tests
+[33mb55a4ed0c[m [core][1835][1847AE] add forgotten nationalization module
+[33mc31c70fa3[m [1835] split up tests
+[33m14c8b6515[m [core][1835][1847AE] pull nationalization into its own module
+[33m16971854d[m [1835] add tests for cert limit, cert packages, and PR conversion
+[33mef8f1a894[m [1835] fix handling of the entity index in the draft and add tests for that
+[33m9dae01cc6[m little correction
+[33m6b290edef[m [1833NE] initial commit
+[33mdd3cf82af[m [1880 Romania] fix tile L141 label (#12833)
+[33mef7cb9b76[m [1880 Romania] loan interest is being charged twice (#12819)
+[33m0fd525eff[m [18Cuba] Fix FC export 8+ counter for the 4D variant
+[33m0d4930b37[m [1835] set train limit for Preußen and condense phases
+[33m2754d08f0[m [1835] implement distance based tokening cost
+[33m111f7f698[m Merge pull request #12764 from jemiahlee/1832_4.1
+[33m5c4610ca4[m [1850] Western Land Grant should allow Mesabi Token buy (#12692)
+[33m6457421bf[m [18ZOO] Fix Info tab when all corporations are open (#12751)
+[33mb787425b7[m [core] support unlimited bank (#12650)
+[33me89556fe9[m [18ESP] skip token swap check if merging corp is out of tokens (#12471)
+[33m633e0c9f9[m Merge pull request #12689 from philcampeau/core-improve-log-for-buy_trains-skip
+[33m7761daf9b[m 18Cuba: spec for FC train export
+[33me955b15ff[m 18Cuba: export a train to the FC each OR set
+[33mdc28930a8[m 18ESP: use action log instead of graph for mountain pass detection while loading
+[33m62c04591e[m Disable YJIT
+[33mcf3d69888[m Upgrade to ruby 3.4
+[33m15c4c9c90[m Stop leaking every replayed game to YJIT's root set
+[33m529d3ed7c[m Add robots.txt and let nginx serve it
+[33m171c0dff2[m Persist nginx deny for the cloud /15 flooding the homepage crawl
+[33m2d9ee2735[m Cap homepage pagination depth for logged-out users
+[33m604482e71[m [1832] Address feedback.
+[33m84454ba00[m[33m ([m[1;33mtag: [m[1;33m2026-07-04_16.53.49[m[33m)[m Merge pull request #12693 from philcampeau/21Moon---improve-UN-Contract-description
+[33m7489c4232[m Merge pull request #12753 from philcampeau/1880Rom-use-standard-float-rules
+[33m4d18a5905[m Merge pull request #12710 from philcampeau/1850-gant-should-allow-yellow-chicago-tile
+[33mb43d04bd6[m Merge pull request #12703 from ddaybell/g-2038-or
+[33m33f4cab7d[m Merge pull request #12684 from philcampeau/1860-no-subsidies-on-simplified-insolvency
+[33mfd7aaf450[m Merge pull request #12680 from philcampeau/18GA-jacksonville-should-be-terminal-except-for-ACL
+[33md977b4d2e[m Merge pull request #12760 from philcampeau/System18-autopass-parliament-when-at-cert-limit
+[33m0064fdfb1[m Merge pull request #12651 from philcampeau/18CZ-timeline-display-on-info-tab
+[33m6a19f6961[m[33m ([m[1;33mtag: [m[1;33m2026-07-04_15.55.33[m[33m)[m Merge pull request #12661 from chrstas/18ESP-Loading-Performance-Surgery-2
+[33m31b795405[m Merge pull request #12779 from chrstas/18Cuba-Sugar-Transport
+[33m05c33a137[m[33m ([m[1;33mtag: [m[1;33m2026-07-03_02.47.08[m[33m)[m update slack
+[33m6ac34edbf[m Merge pull request #12787 from kepakiano/1835_corps_must_buy_trains
+[33meeb47e0c7[m Re-enable signups
+[33m28ab66d76[m Normalize account emails
+[33m294966ad4[m Validate requests in game routes
+[33m43ba7f992[m[33m ([m[1;33mtag: [m[1;33m2026-07-02_19.41.50[m[33m)[m Temporarily disable new signups at nginx
+[33m7c960f529[m Write nginx access log to a host-mounted file
+[33m672a75a9c[m[33m ([m[1;33mtag: [m[1;33m2026-07-02_15.30.52[m[33m)[m Bound home_games cache key space and cap Redis memory
+[33m9f07e9a65[m[33m ([m[1;33mtag: [m[1;33m2026-07-02_14.45.06[m[33m)[m Cache home_games on meaningful params only, not any query param
+[33m7c207f083[m[33m ([m[1;33mtag: [m[1;33m2026-07-02_06.14.28[m[33m)[m Add Cloudflare Turnstile to the auth endpoints
+[33ma2eed6a8c[m Add mx.cloudflare.net to disposable-email MX blocklist
+[33m7fa03e659[m[33m ([m[1;33mtag: [m[1;33m2026-07-02_02.01.16[m[33m)[m Harden webhook SSRF guard
+[33m4f760d614[m Block rotating disposable-email providers by MX backend
+[33m110a20e09[m Fix inline-script/pin XSS sinks and enforce bans per-request
+[33mf5aba7de3[m 18ESP: Remove strict accessor
+[33m0b44836c8[m [18Cuba] Address review feedback on sugar transport
+[33m603e2d8e7[m Fix formatting of signal_end_game event text
+[33m2fe6464f3[m Merge branch 'master' into 1880Rom-use-standard-float-rules
+[33mbd838e181[m[33m ([m[1;33mtag: [m[1;33m2026-06-29_23.18.40[m[33m)[m Tighten /api/chat burst from 5 to 3
+[33m487a9d5b8[m Add stricter nginx rate limit for /api/chat
+[33m6814f4f03[m Reject disposable email domains at signup
+[33mf1f2d2b3f[m Merge pull request #12754 from carlorusso1984/codex/18zoo-unlimited-trains
+[33m4dfafa3f9[m [1835] remove duplicate override of must_buy_train?
+[33m620ac862e[m [1835] force corporations to buy trains when they have none
+[33m9c0e39e2a[m[33m ([m[1;33mtag: [m[1;33m2026-06-29_05.53.25[m[33m)[m remove zoo
+[33m92ca6084e[m Fix fractional page count in admin bans pagination (Opal float division)
+[33mc54515c86[m[33m ([m[1;33mtag: [m[1;33m2026-06-29_05.44.46[m[33m)[m Bump concurrent-ruby to 1.3.7 to clear Dependabot alerts
+[33mf54bd2073[m Add timestamp column and pagination to admin bans table
+[33mae7c8c866[m Add reason field to admin lookup ban actions
+[33m2658386d5[m Improve admin panel: use Form helpers and show ban status in lookup
+[33m81bf311ec[m Allow admins to view chat logs of any game
+[33m13b6cfb4c[m Fix RuboCop HashAlignment in the password-confirm input
+[33m507c8627d[m[33m ([m[1;33mtag: [m[1;33m2026-06-28_23.16.13[m[33m)[m Security hardening: email verification, account/IP bans, admin panel
+[33m2d81bfdfc[m [18Cuba] Refactor cube_choices into named filters
+[33m2772ea6d5[m Merge pull request #12736 from neutronc/1862_usa_canada_pB_sr_mechanics_v2
+[33mc16fe9f5c[m [18Cuba] Restore rule-correct wagon harbor extension
+[33me51ea990a[m 18Cuba: unit test cases for sugar transport
+[33m449494704[m Implements sugar cube production and manual transport to harbors (rules VII.9–VII.11), modelled on 18Uruguay's goods mechanic (train-centric state, attach-during-routing).
+[33mbb0cab62f[m fix(1862gs): address PR review — remove dead Step::Token passthrough
+[33me23acfd8a[m Merge pull request #12752 from carlorusso1984/codex/18zoo-stock-market-metadata
+[33m0413fba0e[m Simplify 2D stock market info rendering
+[33m4dd2cc708[m Merge pull request #12775 from philcampeau/1858india-update-tile-roster
+[33mda6a0e8d7[m Merge pull request #12671 from philcampeau/1880-P2-fix
+[33mca9a3cae4[m [1858 India] Update tile roster - designer's request
+[33m18c0b10df[m fix(1862gs): address PR #12736 review — constants, select, affordability
+[33m5d7b1f1ea[m fix(1862gs): correct P3 — BHL (Bahnhoflizenz) sym, ability, and spec
+[33m865d70bfc[m minor correction
+[33m34b889859[m [18ZOO] Show stock market price info
+[33m365956849[m Merge pull request #12758 from philcampeau/18ESP-simple-logos
+[33m6ca7eec10[m Add 18ZOO code owner
+[33m1256294d1[m Merge pull request #12755 from philcampeau/1867-minor-simple-logos
+[33m404008dc5[m suggested changes from crericha
+[33me09f5b931[m [18ZOO] Declare 2J trains unlimited
+[33m3ca4b0379[m Merge pull request #12746 from kepakiano/1835_allow_cross_buy
+[33meaa53d6fa[m[33m ([m[1;33mtag: [m[1;33m2026-06-15_16.24.34[m[33m)[m top ks
+[33m466eae31e[m Modify light coloured simple logos to black text
+[33m341b7920b[m [1832] Add system code to corporation, add logic for system train buys.
+[33mcc480750f[m Merge branch 'master' into 1835_allow_cross_buy
+[33m2305c42c3[m [1835] add the description for cross buying to the phase status
+[33m55df97280[m Merge pull request #12744 from kepakiano/1835_configure_tile_lays
+[33m6ed510315[m Merge pull request #12732 from chrstas/18Cuba-wagon-logic
+[33mbe546e504[m [18Cuba] Align can_buy_trains status text, clarify comments
+[33m57bfc2c37[m [18Cuba] Enforce wagon face value via spend_minmax, fix EMR variant filter
+[33m3ea275bde[m [18Cuba] Memoize crowded_corps
+[33m09babf7a9[m [18Cuba] Rename 8 train to 8+ and allow cross-company wagon buys
+[33m6d19dc625[m [18Cuba] Add cross-company train rules and refactor wagon buy logic
+[33m68600a9ff[m Merge pull request #12691 from philcampeau/site---add-notofication-when-minimum-player-count-is-reached
+[33mef2873a34[m Merge pull request #12666 from ddaybell/g-2038-data
+[33m0857f2253[m Address Per's review on PR #12703
+[33m2b2f7ce64[m g_2038: tile 2023 count is unlimited
+[33mbeb660fa5[m g_2038: restore HEXES and LAYOUT accidentally dropped in map rewrite
+[33md7b168b0f[m [System18] auto-pass users at cert limit during parliament rounds
+[33m8434b2cc1[m [18ESP] adds simple logos
+[33m193545c0d[m[33m ([m[1;33mtag: [m[1;33m2026-06-10_03.58.28[m[33m)[m Merge pull request #12757 from MatthewDeKoning/update-welcome-page-18ZOO-KS
+[33mc60769d80[m Fix link formatting in welcome notification
+[33m44ad71bc3[m Fix notification message punctuation
+[33m6f2dafbd8[m changed the thing
+[33m2b2fb0cd3[m [1867] adds simple logos for minors
+[33me76d62b20[m [18ZOO] Clean up unlimited train variant
+[33mde765f0e7[m [1880 Romania] Game uses standard float
+[33m470792dd5[m [18ZOO] Show stock market metadata
+[33m514bd64e3[m use elsif to avoid double notification
+[33mc278445a9[m [1835] use phase status to determine tile lays and make tile lays clearer for the user
+[33m5f04f6003[m [1835] move check for cross buying to the game class
+[33m7e8930b89[m Merge pull request #12734 from kepakiano/1835_upgrade_Berlin
+[33mae71608ac[m[33m ([m[1;33mtag: [m[1;33m2026-06-07_02.08.22[m[33m)[m Merge pull request #12733 from philcampeau/1880Rom-VRL-home-city
+[33me4715036e[m [1835] allow buying trains from other corporations and fix ebuy
+[33m5692fd899[m [1835] let major corps lay two yellow tiles during yellow phase
+[33m511592af2[m Merge pull request #12742 from neutronc/1862_usa_canada_p_icons
+[33m7e83643f0[m Merge pull request #12739 from kepakiano/1835_flags_for_half_shares
+[33mef1ae2414[m Merge pull request #12735 from kepakiano/1835_allow_upgrading_green_XX_tiles
+[33m56f51d189[m Merge pull request #12728 from kepakiano/1835_no_dividends_for_IPO_shares_and_minor_half_pay
+[33m9e7e9604c[m feat(1862gs): add bonus marker and SLC icon SVGs for 1862 USA & Canada
+[33mef6ae626a[m Merge branch 'master' into 1835_no_dividends_for_IPO_shares_and_minor_half_pay
+[33m689c96928[m [1835] render flags for 5% shares
+[33m9e716708a[m [1835] use future_label for green XX tile to make upgrade more clear visually
+[33m6334ff9fc[m Merge pull request #12707 from jemiahlee/1832_token_fix
+[33m1e1ea2405[m Merge pull request #12727 from kepakiano/1835_fix_share_percentages
+[33mfdd1deed1[m Merge pull request #12655 from jemiahlee/1832_2
+[33mb8b0e3596[m Merge pull request #12500 from chrstas/Game-Data-Details
+[33mab4584eb7[m [1835] put the 'B' label on the yellow Berlin tile
+[33mbbc852fdb[m changes suggested by ollybh
+[33me7084f44f[m [1862 USA & Canada] feat: private company close triggers
+[33mc72173fce[m [1862 USA & Canada] feat: GHU token discount + NYH par price lock at $100
+[33mdb78c3ffd[m Merge pull request #12696 from neutronc/1862_usa_canada_pA_game_fixes
+[33m7b0df8c5f[m Merge pull request #12725 from kepakiano/1835_float_preussen
+[33mfd24be24d[m [1835] allow upgrading green XX tiles to brown X tiles
+[33m4f5bedf6b[m [1835] ignore number of cities when upgrading Berlin to yellow
+[33m9b78bfa35[m [1880 Romania] VRL shouldn't have specific city assigned in entities.rb
+[33m2f3ca37d5[m [1835] remove unnecessary parantheses
+[33m4f0c2e1bd[m [1835] make code more expressive
+[33ma0deb5267[m [1835] make code more idiomatic
+[33m958a2a293[m [18Cuba] Simplify cheapest-train logic in BuyTrain step
+[33m88d0153e8[m [18Cuba] Fix emergency buy crash and add event descriptions
+[33m6158ac0a9[m [18Cuba] Specs for wagon logic
+[33m67f23e1da[m [18Cuba] Sugar cane wagon logic
+[33m2aa1fb4c2[m Merge pull request #12731 from ollybh/1862-codeowners
+[33mccc5c3ba1[m [CODEOWNERS] Improve matchers for 1862 games
+[33m060a55633[m [1835] move marking the beginning of an OR to the Operating round class
+[33m23f74ac78[m [1835] move logic for whether or not to payout companies to game class
+[33m46329ca4b[m [1832] use hex identity instead of comparing IDs.
+[33m0dc1c90e8[m [1832] Fix miami_has_been_run variable name
+[33m359f81e9d[m [1835] fix percentages of OL and MS
+[33m6d93c5d01[m [1835] let minors only half pay and do not let IPO shares pay revenue
+[33mfb26e1e96[m Merge branch 'master' into 1835_float_preussen
+[33m60637d012[m [UI] Game Details: fix hotseat host link, time display, and empty description
+[33m359873de9[m [1832] Address feedback.
+[33m705e9c437[m [1835] code cleanup
+[33m8eb3486cf[m [1835] code cleanup
+[33m945415c67[m [1835] code cleanup
+[33m506ff9d98[m [1835] code cleanup
+[33m8f47b37a5[m [1835] implement formation of Preußen include all choices and mandatory conversions
+[33mbb833873e[m Fixture correction
+[33mf006f66d3[m Fix stale graph cache after destination connection token release
+[33m06db6104a[m schreib mir noch commit title und descFix migration script: auto_action ordering and cross-corp detection
+[33mebc029bb2[m [1832] Updates to address feedback and move the modification of the flag out of revenue_for().
+[33m1091158a9[m Revert "[1832] refactor system check to corporation class."
+[33md4064ef98[m[33m ([m[1;33mtag: [m[1;33m2026-06-02_15.40.02[m[33m)[m Merge pull request #12662 from perwestling/fix/excessive_discounts
+[33m1c0e54718[m Merge pull request #12657 from ddaybell/map-zoom-above-map
+[33mb5c5b7691[m Merge pull request #12649 from philcampeau/18Uruguay-currency
+[33m70ac4de15[m Merge pull request #12596 from chrstas/1822-bugfix-minor-not-removed
+[33md5a061605[m Merge pull request #12582 from philcampeau/create-always_show_par
+[33m8d227fd6e[m Merge pull request #12593 from philcampeau/replace-placeholder-traincounts-with-unlimited-value
+[33m38f640fac[m Merge branch 'master' into replace-placeholder-traincounts-with-unlimited-value
+[33m7934c4776[m [1862 USA & Canada] feat: phase-gated tile-lay budget
+[33mec1bb95de[m [1862 USA & Canada] fix: E-train distance keys must be strings not symbols
+[33m65e90fcd3[m [1862 USA & Canada] fix: clear graph cache after home token placement
+[33m3ab51b05b[m Merge pull request #12591 from philcampeau/18ireland-set-last-rank-of-trains-to-unlimited
+[33m2cc8f658d[m Merge pull request #12589 from philcampeau/18FL-set-last-rank-of-trains-to-unlimited
+[33m9308aaf4b[m Merge pull request #12588 from philcampeau/18EU-set-last-rank-of-trains-to-unlimited
+[33m886ace288[m Merge pull request #12587 from philcampeau/18ESP-set-last-rank-of-trains-to-unlimited
+[33m645bddd02[m Merge pull request #12586 from philcampeau/18christmas-eve--set-last-rank-of-trains-to-unlimited
+[33m5bc130c46[m Merge pull request #12584 from philcampeau/18chesapeake-unlimited-diesels
+[33m47ce84df4[m [Core] Added comment explaining `ALWAYS_SHOW_PAR_PRICE` constant
+[33m610df372c[m Merge pull request #12643 from neutronc/1862_usa_canada_p02_group_unlock
+[33m11277a94b[m [1850] Gant private should also allow laying Chicago tile
+[33mc5e1c7a96[m [1832] Update Cotton behavior and update both cotton and port tokens.
+[33m1db049598[m g_2038: operating round wiring and buy-train step
+[33mf71569253[m g_2038: replace unclaimed/claimed revenue split with placeholder 42
+[33m68cecb44c[m Merge pull request #12681 from philcampeau/1850jr-to-prod
+[33m29d08cb65[m Merge pull request #12668 from perwestling/feature/1824-as-beta
+[33m38f7e331b[m Merge pull request #12568 from ddaybell/18fl-fix-forced-conversion-capitalization
+[33mbdc5cc784[m Merge pull request #12494 from ollybh/system18-gotland-issue-12476
+[33mec83bc505[m Merge pull request #12531 from kepakiano/1835_implement_stock_rounds
+[33m3d5578bee[m Merge pull request #12532 from ddaybell/1840-fix-train-exhaustion-crash
+[33mdedcf148c[m Merge pull request #12562 from ddaybell/18india-player-hand-count
+[33mbc16da458[m fix(1862gs): raise on unknown group in group_available? instead of returning true
+[33m0234a7dfb[m [21Moon] Improve UN Contract description
+[33m89a8f8182[m Send notification when minimum player count is reached
+[33mbba91ea8d[m Improves log message when buy_trains is skipped due to space
+[33madacbd6cc[m [1860] no subsidies on simplified insolvency
+[33m79f8ea765[m [1850jr] to production
+[33m939638269[m minor tweak to log messages.
+[33me2f138e86[m [18GA] Jacksonville should be terminal except for ACL
+[33m053706129[m fix(1862gs): correct corp_groups memoization — map over symbol array
+[33m3b94d62a5[m fix(1862gs): address PR #12643 review — remove safe-nav in corp_group; rubocop fixes
+[33m6f0244524[m Update lib/engine/game/g_1862_usa_canada/game.rb
+[33md30f75b7c[m Remove @strict guard from CDC blocking? per review
+[33m563d158ae[m Revert "Use transform_keys instead of JSON roundtrip for string key conversion"
+[33m72aa7c077[m [1880 Romania] P2 fix and events text for borders
+[33m045d04f09[m Use transform_keys instead of JSON roundtrip for string key conversion
+[33m500123c68[m Revert "Eliminate graph computation for mountain pass during loading"
+[33m79212c965[m Eliminate graph computation for mountain pass during loading
+[33md00fa977a[m Fix migration script: convert symbol keys to string keys
+[33m20e793450[m Set 1824 as beta
+[33me40b7ac05[m Fix review comment, avoid new log message
+[33mfd8b5758a[m Merge pull request #12545 from chrstas/18Cuba-Upgrade-Tiles
+[33mf3673e80c[m 18Cuba: Extract added_paths in check_track_restrictions!
+[33m7cfa5e6db[m g_2038: fix DEV_STAGE typo (:pre_alpha → :prealpha)
+[33m0bb9afb04[m g_2038: set DEV_STAGE to :pre_alpha
+[33m2ff0eaeea[m Merge pull request #12641 from philcampeau/1880-Romania-REMAR-routing-fix
+[33m5435bc74d[m Merge pull request #12642 from philcampeau/1880-romania-blue-hex-fix
+[33mf18f671a9[m g_2038: fix entity data, map tiles, and spaceship definitions
+[33m36a12cfcc[m g_2038: add corporation logos for all 8 corporations
+[33m40097a5ca[m Add top margin to zoom controls for spacing from adjacent UI elements
+[33m5faf7001a[m fix(18ESP): correct corporation spec anchors after fixture migration
+[33m3191ff7c1[m fix(18ESP): correct spec anchors after fixture migration
+[33m4cb7ef68f[m 18ESP: Add migration script for destination_connection actions
+[33m03a8008b3[m 18ESP: Drop replaying? guard and legacy destination format
+[33m0c85beecc[m 18ESP: Move graph clear from mountain pass query to mutation
+[33m8abcb1762[m 18ESP: Wire destination_connection into action log
+[33mf195d627a[m Merge pull request #12620 from chrstas/18ESP-Loading-Performance-Surgery
+[33m8b4e2eda2[m Handle excessive discounts
+[33mfeda96d58[m implement change to 1880 directly rather than Romania
+[33mcf3c72404[m [1835] form preussen wip
+[33mf4fd755a0[m[33m ([m[1;33mtag: [m[1;33m2026-05-22_04.08.04[m[33m)[m Merge pull request #12640 from philcampeau/1880Romania-revert-to-2P-name
+[33m683d35683[m Merge pull request #12647 from Witzman/18oe_guidelines
+[33mc851065f4[m Merge pull request #12648 from philcampeau/1880Romania-remove-ferry-hexes
+[33mf12d041ec[m fix(18oe): update GAME_INFO_URL to GitHub wiki page
+[33m39d2a6cbf[m Update everything to 2R rather than 2P
+[33mdd1896c42[m fix(18oe): address PR review comments on consolidate.rb
+[33m1d235e79e[m Move zoom controls above map to prevent obscuring map content
+[33m9e03d39da[m [1832] refactor system check to corporation class.
+[33mbef80f0e3[m [1832] Add London Investment company, Miami token rules.
+[33m81a1e0b31[m refactor(18oe): wrap TILE_POINT_BUDGET in game method
+[33md436bf6db[m [18CZ] fix timeline display for last set
+[33m76e110284[m refactor(18oe): address PR review feedback on consolidate/waterfall steps
+[33m98f39613a[m [18Uruguay] Change currency marker from $U to $
+[33md0bdbb5f4[m Merge branch 'tobymao:master' into 1880Romania-remove-ferry-hexes
+[33md0db6df05[m [1880 Romania] disable 1880's ferry_hexes
+[33m7ede73eda[m fix(18oe): operating_order floated? filter; correct train supply counts
+[33ma5d43a697[m fix(18OE): bug fixes, constants, and cleanup (upstream-safe changes)
+[33m5cc896b89[m Merge pull request #12639 from philcampeau/1880Rom-fix-P3-application
+[33m7b715b489[m [1862 USA & Canada] feat: corporation group unlock (corrected rules)
+[33m7411c9bd0[m [1880 Romania] blue hexes should count as towns
+[33m748ea37ac[m [core] compute_stops distance sort by number of node types rather than number of hash keys
+[33mb7e9cc9f5[m removes one added empty line in 1858 switzerland
+[33mf195df1f3[m removing changes to 1858, 1866, and 18Tokaido from this commit
+[33m119fbf914[m [1880 Romania] Corrects GAME_END_REASON_TEXT
+[33m5d8469566[m fixed script file and fixture
+[33mc8cdad732[m Merge pull request #12622 from neutronc/1862_usa_canada_p01_data
+[33m2924ac8df[m add script to migrate existing games
+[33mb1ac044c7[m Merge pull request #12598 from chrstas/18ESP-issue-with-reverting-back
+[33m03e806013[m [1880 Romania] revert 2R-train name to 2P
+[33ma49b5480f[m additional change to account for TR's included terrain discount
+[33m4279671a3[m [1880 Romania] fix P3 ability
+[33m21f3da470[m 18ESP: Review adjustments
+[33m060f1defe[m Merge pull request #12605 from Witzman/18oe_fix_level8_gameend
+[33m874ce93ff[m Merge pull request #12631 from Witzman/18oe_partition_rendering
+[33m887f80e59[m refactor(partition): remove redundant top-level minmax
+[33ma5ca979e4[m style: wrap long event log string in event_remainder_cash_added!
+[33mbab2c24bc[m [18OE] rename Bank#receive -> add_cash; clearer inverse of spend
+[33m54f6f90a1[m [18OE] clarify remainder cash log: note bank-break can shorten final OR set
+[33m910ee8a2a[m [18OE] strip remaining §13 refs from TRAINS comment and log notice
+[33md8b0457f5[m [18OE] remove rules section refs from GAME_END_CHECK comment and EVENTS_TEXT
+[33m908d49374[m refactor(18oe): address PR #12605 reviewer comments
+[33m5209e0d7d[m refactor(18oe): available_on + drop game_end_check_final_phase? per review
+[33m608011e55[m style: rubocop -a
+[33m313528db1[m refactor(18oe): move level8_train_available? to game.rb; tighten event log
+[33ma41427edf[m fix(18oe): bank-break timing + level-8 game-end trigger + remainder cash (BUG-024/025)
+[33m09bf37453[m fix(18oe): remove bankrupt: :immediate game-end trigger (BUG-027)
+[33m6ab854b2a[m fix(18oe): gate level-8 trains behind 4th level-7 purchase (BUG-018)
+[33m215a75ec5[m Merge pull request #12603 from Witzman/18oe_fix_president_overcap
+[33m9cc188884[m fix(1862gs): address PR #12622 review feedback
+[33m8cb3f61e7[m Update lib/engine/game/g_1862_usa_canada/game.rb
+[33mdffd3fa1a[m Merge pull request #12572 from jemiahlee/1832_1
+[33m4abee4a75[m refactor(18oe): inline bundle.corporation in can_gain? (review nit)
+[33m574bfb175[m Merge pull request #12604 from Witzman/18oe_fix_stock_terrain
+[33m17024bb74[m Clean up comments
+[33m4eadd5eb4[m Update lib/engine/game/g_1862_usa_canada/game.rb
+[33mda9a773ad[m Update lib/engine/game/g_1862_usa_canada/entities.rb
+[33mbc0868ca0[m Merge branch 'tobymao:master' into 18oe_partition_rendering
+[33mb91d7927f[m Merge pull request #12585 from philcampeau/18CZ-set-last-rank-to-unlimited
+[33m35fd4e758[m fix(partition): respect draw anchor when length is set; add 18OE province borders
+[33ma721f0d4f[m [1862 USA & Canada] fix(meta): split GAME_TITLE per reviewer feedback
+[33m6ed9237fe[m [1862 USA & Canada] PR 01: data skeleton — map, entities, market, trains, logos
+[33m2820f110b[m comment update
+[33m7637e4350[m blocking guard
+[33m81acb67c0[m 18ESP:  Test specs and destination_connection
+[33m92b24ea3b[m Merge branch 'master' of https://github.com/tobymao/18xx into 18oe_fix_president_overcap
+[33mdcb180905[m refactor(18oe): address PR #12604 reviewer comments
+[33mc9938a4dd[m fix(18oe): compute overcap price from corporation share_price, not bundle
+[33mb76b004a9[m refactor(18oe): use can_gain? to bypass holding cap for president pool buy
+[33mdc36b7854[m 18Cuba: Guage appropriate check
+[33me5d80f182[m Merge pull request #12602 from Witzman/18oe_fix_share_price_movement
+[33m96ff0ed2e[m Merge pull request #12601 from Witzman/18oe_fix_par_prices
+[33m98cdbf9dd[m fix(18oe): correct N31 Lille pre-printed revenue to £20
+[33m0d475f305[m refactor(18oe): address coding guideline issues in stock terrain branch
+[33m647f66136[m refactor(18oe): use modify_purchase_price for overcap buy per review
+[33m24ba2a341[m refactor(18oe): use %i[] include? in share_price_change per review
+[33m3af8631d3[m refactor(18oe): use case statement in get_par_prices per review
+[33m8e6f90896[m [1832] Update constants for use with variants, fix other minor mistakes.
+[33m256315de4[m style: rubocop -a
+[33m68724d12f[m style: rubocop -a
+[33mbff07ffb4[m fix(18oe): zone-based terrain discount + E/F augmentation + rounding (BUG-008/009/010)
+[33mdc9e633ab[m fix(18oe): move stock price DOWN when major issues treasury shares (BUG-022)
+[33mdc8602bd2[m fix(18oe): process sold-out UP moves in share-price order at SR end (BUG-015)
+[33m9bb1a4db9[m fix(18oe): president pool purchase above 60% at 2× price (BUG-021)
+[33m25e20019d[m fix(18oe): get_par_prices returns correct set for regionals
+[33m4ee991dc4[m fix(18oe): implement §4.4 three-way OR share price movement (BUG-013, BUG-014)
+[33md18a6ddd3[m Merge pull request #12567 from ddaybell/18usa-log-removed-subsidies
+[33mce9b94483[m Merge pull request #12592 from Witzman/18oe_ports
+[33m3615b6e51[m Merge pull request #12578 from Witzman/18oe-corechange
+[33m7639040db[m revert(blocks_partition): drop partition_type&.to_sym
+[33m7cc3ba787[m fix(partition): restore type&.to_sym, length&.to_f, partition_type&.to_sym
+[33mb23507c52[m Merge pull request #12599 from philcampeau/1880romania-remove-minor-class,-fixes-p3
+[33m6d53e381e[m [1880 Romania] removes dedicated minor class, fixes p3 for minors
+[33m120a06dd1[m Revert "fix(partition): restore to_sym/to_f dropped by simplify commit"
+[33ma3c2e60e0[m fix(partition): restore to_sym/to_f dropped by simplify commit
+[33mbc6657312[m refactoring
+[33meac125a75[m 18ESP: Graph processing
+[33m0cc6acf60[m[33m ([m[1;31morigin/pr-12578[m[33m)[m simplify
+[33m8301bcb34[m docs(TILES.md): document partition DSL including length and type:province
+[33m58152c8ae[m fix(partition): correct @length ivar assignment after rename
+[33ma6477e20c[m style(18oe/map): rename len to length for DSL consistency
+[33m286f41c5f[m style(partition): rename len to length for DSL consistency
+[33m71e527264[m style
+[33m32db42fee[m style
+[33md9312ff88[m fix(18oe/map): remove leading semicolons from province partition strings
+[33me0a1eefd0[m fix(18oe/map): convert province partitions to len-based anchor format
+[33mbec399060[m add 1854
+[33m3e53cd6e8[m refactor(partition): add len param — anchor at a, travel toward b
+[33m7501afecf[m add 1868WY
+[33mb41e17a5a[m 1822Africa: remove minor bugfix + fixtures
+[33md4f2b3d17[m add 1848 as well
+[33m3fe637d04[m all remaining games that could be converted without major code overhaul
+[33m4ef66424a[m [18India] Fix grammar and simplify player_card_rows interface
+[33m16b991752[m replace placeholder traincounts with unlimited value
+[33ma9c2f1cdb[m style
+[33meef06ecbe[m refactor(18oe_ports): move partition.rb to 18oe-corechange (PR #12578)
+[33md6b770b31[m refactor(18oe_ports): move partitions.rb to 18oe-corechange (PR #12578)
+[33mc9cf60308[m feat(partitions): add :province render type (orange dashed, centre vertex)
+[33m414997a88[m Merge remote-tracking branch 'upstream/master' into 18oe-corechange
+[33m6c9965c95[m Merge remote-tracking branch 'upstream/master' into 18oe_ports
+[33mcb13418ec[m [18Ireland] set last rank of trains to unlimited
+[33m72da639eb[m [18FL] set last rank of trains to unlimited
+[33m152c874c6[m[33m ([m[1;33mtag: [m[1;33m2026-05-13_17.56.40[m[33m, [m[1;33mtag: [m[1;33m2026-05-13_03.14.37[m[33m)[m Merge pull request #12544 from Witzman/18oe_fullmap
+[33mde37c8df4[m Merge pull request #12543 from Witzman/18oe_buytrains
+[33m2f6b6e48b[m [18EU] set last rank of trains to unlimited
+[33me4f6ded9e[m [18ESP] set last rank of trains to unlimited
+[33m58c06a216[m [18ChristmasEve] set last rank of trains to unlimited
+[33m035f7d63e[m  [18CZ] set last rank of trains to unlimited
+[33me3517523c[m [1840] Extract buyable_depot_trains? helper, use !empty? over any?
+[33m86dd4ce18[m [18Chesapeake] set diesels to unlimited
+[33m85735640e[m include 1832 in this as well
+[33me5d597413[m Add constant to allow games to always show par price on charter
+[33mbde194012[m Merge pull request #12581 from philcampeau/1880Romania-P2-should-work-for-minors
+[33mfff30f0e0[m Merge pull request #12580 from philcampeau/1880Romania-train-count
+[33mcf6ca11e0[m Merge pull request #12563 from ddaybell/18india-fix-commodity-legend-font-color
+[33m83ec5e78f[m Merge pull request #12537 from michaeljb/1849-reorder-corps
+[33m011d17f81[m Merge pull request #12560 from ollybh/1858-india
+[33m8020edc5b[m RU Border
+[33m39eb9c16a[m style
+[33mff732462d[m RU Border
+[33m868dc3a61[m [18India] Simplify player_card_rows to return a hash; relabel as Hand size
+[33m49a81ca5e[m - Various changes to train roster, tile counts, and available tiles, per the newly-released official rules - new fixture to account for changes - add link to rules
+[33mba3f5b1f0[m [1835] code cleanup for stock rounds
+[33m174522718[m fix
+[33m88300e129[m modify Assign#actions in 1880 to allow FI to assign Danube port
+[33m1ead80c31[m 18Cuba: rephrasing condition
+[33m12a25451c[m rubocop fix
+[33m0618230b6[m 18Cuba: Reviewer feedback incorporated
+[33m0d994d003[m incorrect conflict resolution corrected - removed register colors again
+[33m5af47bd46[m small code changes
+[33m38a4922ef[m Changing back to :permissive with respective rules
+[33mf00b1fe83[m 18Cuba: Tile upgrading and sugar cane fields
+[33m54d9fe190[m update trains_not_triggering_sr constant
+[33m7265a10c8[m [1880 Romania] fix train counts
+[33m4d384b279[m [1880 Romania P2 should work for foreign investors
+[33me7a7f9906[m fix(18oe): remove convert from player actions — corporation_actions is correct
+[33m63d5baa5c[m fix(partition): sync partition.rb with 18oe-corechange — a.to_i for -1 centre
+[33m01f6eed97[m Merge remote-tracking branch 'origin/18oe_fullports' into 18oe_ports
+[33mafc7c679c[m Merge branch 'tobymao:master' into 18oe_fullports
+[33m9fbffb6cc[m Merge branch 'tobymao:master' into 18oe-corechange
+[33m053a44152[m Merge branch 'tobymao:master' into 18oe_fullmap
+[33m5a93b3c22[m 18USA: address PR review feedback on subsidy logging
+[33m4c7c7cab2[m Use black text on yellow and green legend header backgrounds
+[33mdc44d9b6a[m Merge branch 'tobymao:master' into 18oe_buytrains
+[33m4598bbf85[m Merge branch 'tobymao:master' into 18oe_ports
+[33mf6acf187a[m style(18oe): remove duplicate help method in BuySellParShares
+[33m419e8a1c2[m fix(18oe): restore province partition DSL to a:-1,b:X (corner vertices 0-5)
+[33m275b5ccdc[m fix(partition): -1 sentinel via a.to_i; restore other games to original vertex numbers
+[33m415a73439[m fix(partition): bump corner vertex numbers +1 in all affected games
+[33m6cbc16185[m fix(18oe): province partition DSL 0=centre, 1-6=corners; render orange dashed
+[33mdf50970fe[m refactor(partition): vertex 0 = centre, 1-6 = corners (city 0 convention)
+[33m4765aa9fc[m Merge pull request #12558 from Witzman/18oe_ports
+[33m157c59568[m style
+[33mcc50087dc[m refactor(partition): simplify centre-sentinel parsing and inner/outer guards
+[33m14ca561ef[m 18OE: gate cross-RR buying on Major RR Phase, not train phase
+[33m4f1c2b68a[m revert(18oe): restore partition.rb to upstream/master
+[33m8f62115bb[m fix
+[33m023dbb142[m revert partitions.rb and blocks_partition.rb to upstream
+[33m617318e91[m refactor
+[33m313d966f5[m Merge branch 'master' into 18oe_fullmap
+[33m33c5ec8c1[m 18OE: address PR review — drop redundant accessor and override
+[33m10eb21483[m Normalize partition type to symbol at construction
+[33mbf64f5b43[m Normalize partition type to symbol at construction
+[33m0a9000c08[m Normalize partition type to symbol at construction
+[33m426965d5a[m Merge branch 'master' into 1835_implement_stock_rounds
+[33m0dbc6c7cb[m Merge pull request #12542 from Witzman/18oe_minorzones
+[33m0183fc26c[m style
+[33m6d40afcf1[m style
+[33m86d8a2b69[m feat(18oe): add port sea stubs to all 37 port hexes
+[33mb0a1d6c5e[m style
+[33m543194e4a[m style
+[33m6922e7854[m Merge pull request #45 from Witzman/18oe_fullports
+[33mda0f9eb6f[m Merge pull request #12551 from ollybh/remove-register-colours
+[33m40eb7da16[m mapping
+[33mbafae11f2[m Merge pull request #12556 from kepakiano/1835_add_plus_trains
+[33mea36e7307[m Merge pull request #12553 from kepakiano/1835_forbid_routes_including_Berlin_twice
+[33m0741b7359[m Merge pull request #12547 from kepakiano/1835_brown_Hamburg_tile
+[33m4419f7a2b[m style
+[33m13ee064cd[m style
+[33mfeccd2cb8[m map
+[33mde5c9f8a2[m style
+[33m8f69eb134[m map
+[33mbe3d3501b[m map
+[33m02473545a[m style
+[33m019d3739c[m map
+[33m8f76a10c0[m Handle hex center case in partition initialization
+[33m0856a63ed[m Refactor color method and partition type checks
+[33m44772bbc3[m border
+[33mfc630c184[m fix
+[33m62667e374[m borders fixed
+[33m1df9b871f[m style
+[33m4c627aec8[m 1
+[33m09bbe1bf5[m feat(18OE): add intra-hex province partition lines for all 28 border hexes
+[33mb5976534d[m feat(18OE): intra-hex province border lines via partition type :province
+[33mdd00411a4[m Merge branch 'tobymao:master' into 18oe_ports
+[33mb7364d477[m 18wood doesn't have anything
+[33m5b224ed47[m[33m ([m[1;33mtag: [m[1;33m2026-05-08_02.08.53[m[33m)[m Merge pull request #12394 from philcampeau/1880-romania-updates
+[33m9f53a0b9e[m 18OE: move minor_floated_regions tracking into claim_region!
+[33m8d1b950c1[m 18OE: minor track-rights chit system and home-token zone tracking
+[33md6e43973e[m 18OE: set Lille (N31) pre-printed revenue to £10
+[33m9112166da[m 18OE: public ports — map, track stubs, terrain fixes, custom colors
+[33m87fc1735f[m 18OE: gate pass on president? instead of raising; drop @trigger_is_president
+[33m5ea1cc227[m 18OE: extract zones_display helper to remove duplication
+[33m4788f2d3e[m 18OE: replace magic 6 with CONVERSION_NEW_SHARES constant
+[33ma1a784873[m 18OE: extract converting_actions / converted_actions helpers from actions()
+[33m4dd4ece91[m 18OE: block all regional share sales (§10.1 rule-correct)
+[33mfbc54bc8b[m style
+[33m64c48d27d[m 18OE: remove §10.5 minor merger from 18oe_fullmap SR step
+[33mf602d258b[m 18OE: show mandatory-president buy as UI helper text, not log entry
+[33m209065c4b[m 18OE §9.3: full regional→major conversion implementation
+[33m58c5bd37b[m 18OE: fix broken SR after regional→major conversion
+[33me0753da40[m 18OE: stock round fixes — buy guard, share redemption, SR floating
+[33m57793f55f[m Merge branch 'tobymao:master' into 18oe_buytrains
+[33mb8e0fad09[m stylemake
+[33m32c70d23c[m 18OE: extract train_obligation_active? predicate; use unless (§17, style)
+[33m8e7ca5c49[m 18OE: move @first_or_done assignment inside next_round! case branch
+[33m1dd10f819[m Merge pull request #12561 from Witzman/18oe_rulechanges
+[33m54710dfce[m Merge branch 'master' into 1880-romania-updates
+[33m4ffd1a17e[m last two suggested fixes, add game announcement to main page
+[33m8be4933e8[m 18OE: auto-pay minor/national dividends without user prompt
+[33m704786a19[m 18OE: restore ? on non_starter_trains_available?
+[33m28ca3c183[m 18OE: drop ? from non_starter_trains_available
+[33m6fbb5f2e0[m 18OE: extract non_starter_trains_available? into game class
+[33m33eb944b8[m 18OE: rename fulfill_train_obligation to fulfill_train_obligation!
+[33m6932c1051[m 18OE: move train_obligation phase check into fulfilled_train_obligation?
+[33mef44b90f5[m 18OE: remove erroneous player check from can_entity_buy_train?
+[33m3ccbbb287[m Merge pull request #12570 from bentziaxl/18esp_beta
+[33mea7c163f9[m move 18esp to beta
+[33m90c22a8a3[m 18FL: fix double-capitalization of unfloated corps on forced conversion
+[33m3c7b8fec5[m 18USA: log subsidies removed from pool at game start
+[33mf2255e4c1[m[33m ([m[1;33mtag: [m[1;33m2026-05-04_19.05.31[m[33m)[m fix home page crash when finished game result has unknown player id
+[33mce8f3ad60[m 18India: use theme font color in map legend tables
+[33mc1029f834[m [1840] Excuse tram obligation when no trams available; add FAQ link
+[33m273f51a83[m [18India] Display hand size on Info tab and Entities player card
+[33m53e661f9b[m PR feedback
+[33m8b6ce3820[m 18OE: dividend types, stock price movement, HalfPay mixin
+[33mc92e85177[m 18OE: train purchase rules — reserved 2+2, OR1/Major Phase gating
+[33mb465e2f2b[m [1858 India] Fix typo in city name: Bhagalpur not Bhagaipur
+[33m5fc6f0dd6[m [1835] clean up code for Hamburg ferry
+[33m45b544f94[m [1835] explain why tile 221 uses two off-brown colors
+[33m80d81fe14[m [1835] use proper Ruby style for boolean functions
+[33me357e0d2e[m [1835] let plus trains visit n towns and make MARKET array look nicer
+[33m986c298da[m [1835] correct revenue of third green Hamburg city
+[33m50e99decd[m [1835] make sure ferry hint is only displayed for brown Hamburg tile
+[33m1509e44c4[m Merge branch 'master' into 1835_brown_Hamburg_tile
+[33ma3ce57cb5[m Merge branch 'master' into 1835_implement_stock_rounds
+[33m168c6e259[m [1835] forbid routes including the yellow Berlin tile twice
+[33m1f4100c37[m Merge pull request #12523 from kepakiano/implement_1835_steps
+[33mb4a04f942[m [Core/various] Remove `register_colors` method
+[33m54f707125[m change postion on tools tab
+[33m49c4bd97a[m Merge pull request #12541 from Witzman/18oe_map
+[33maa247467f[m ferry
+[33mc43364bf1[m[33m ([m[1;33mtag: [m[1;33m2026-04-26_23.43.04[m[33m)[m Merge pull request #12540 from Witzman/18oe_trains
+[33m6ec478e7a[m ferries
+[33md1d0478a9[m [18OE] Add ferry lines across Mediterranean, Adriatic, Aegean, and Atlantic sea zones
+[33m89942b68a[m [1835] correct city slots on brown Hamburg tile and calculate ferry fee
+[33m1fffb2cbb[m Merge pull request #12535 from chrstas/1822-Bugfix-11327-Concession-Exchange-Msg
+[33mf1660dc55[m Merge pull request #12526 from ollybh/1822pnw-issue-12495
+[33me81cfeceb[m 18OE: add full map.rb and map-data corrections from 18oe_fullmap
+[33m3c79cd126[m train correction
+[33m38649715e[m Merge pull request #12525 from kepakiano/18esp_check_for_destination_after_special_track
+[33mf5c465b1a[m Merge pull request #12522 from perwestling/fix/12496
+[33m380f835b6[m Merge pull request #12521 from perwestling/fix/12492
+[33m189d19dff[m Merge pull request #12475 from philcampeau/1832-prealpha-updates
+[33m9afa2e2bb[m Merge branch 'master' into implement_1835_steps
+[33mb67b3c569[m [1835] remove unnecessary Operating Round subclass and clean up code
+[33m5f9d1dc13[m[33m ([m[1;33mtag: [m[1;33m2026-04-26_07.28.17[m[33m)[m Merge pull request #12524 from kepakiano/add_formatting_hint_to_development_md
+[33mbc7dfa79a[m Merge pull request #12099 from philcampeau/1856-eliminate-prime-trains
+[33me9573d2a8[m Merge pull request #12538 from michaeljb/dev/db-scripts
+[33m0609d2359[m Merge pull request #12498 from chrstas/18Cuba-Rusting-Upgrading-Trains
+[33m4ecb5c86d[m Merge pull request #12520 from chrstas/18RG-bugfix-12518-game-end-triggering
+[33mebb131e79[m Merge pull request #12517 from kepakiano/1822-skip-double-cash-if-player-order-would-remain-unchanged
+[33m65ea5301d[m Merge pull request #12511 from kepakiano/1817-disable-corporate-actions-on-must-sell
+[33mdb7b3150f[m [dev] DB script updates
+[33ma9b225944[m Merge pull request #12482 from lmx2020-18xx/multi-title
+[33ma09ea4ed2[m Merge pull request #12436 from philcampeau/account-creation-page-update
+[33medf855b02[m Merge pull request #12342 from philcampeau/password-change
+[33m852a96464[m Merge pull request #12217 from michaeljb/v2-init
+[33med559033f[m [1849] reorder corps after sell action, instead of at end of SR turn
+[33m6e611f6a9[m bugfix 11327
+[33m52a604f54[m [1835] add dynamic cert limit, nationalization and selling corps in blocks
+[33m5fb6ef8fa[m [1835] move PR lower in entities so that it is shown after HE in the SR
+[33m0f1c76adb[m [1835] clean up code of vanilla starting package draft
+[33mc315aa26d[m revert game_data to original versoin
+[33m63d39b954[m Separating in own section
+[33m9d909cf7f[m move to alpha
+[33maf0c2879d[m simplifies Danube port code and parrer Step. removes stock.rb file from 1880 Romania. Simplifies tracker with minor tweak to base tracker.rb file.
+[33m72b4212c8[m Regenerate fixture for REMAR assign-ability change
+[33md8e221eb0[m rubocop fix
+[33m3d632078a[m New Fixture, renamed fixtures
+[33mac3c8117d[m Merge pull request #12513 from Witzman/18oe_mapupdates
+[33mc5e5a2b31[m Remove duplicate CITY_NATIONAL_ZONE constant definition
+[33md7ae9cb31[m restore accidental ukfr map deletion
+[33mee345923b[m Add Z41 (Ajaccio) to France/Belgium zone
+[33m59169ea98[m Remove Z41 (Ajaccio) from Italy zone — belongs to France
+[33m220cb2132[m coding guidelines changes
+[33mb8e3dbc8d[m style text finding fixed
+[33mbbd51418f[m national zones
+[33m0a2ec7ad7[m Delete lib/engine/game/g_18_oe_uk_fr/map.rb
+[33m7eea3001c[m Merge pull request #12508 from Witzman/18oe_features
+[33mfc6082fa1[m [18ESP] check if corporation reached destination after special tile lay
+[33maedf5b988[m Fix pending_corps to track regionals only
+[33mc1ec4910e[m Consolidate step inherits from G18OE::BuySellParShares
+[33ma57c2d0f5[m Fix Constantinople (AA82) pre-printed revenue to 20
+[33m8736bedef[m Remove buggy buyable_trains 2+2 obligation filter
+[33mda518e081[m style fix
+[33m494c0655a[m Apply second round of PR review feedback
+[33mc34a1fb0a[m Apply PR review feedback: correctness and cleanup fixes
+[33m4fd447783[m move consolidation/train-buying logic into features branch
+[33m3100eaba8[m failed test fix
+[33maf3c95b59[m Delete =
+[33me49c68962[m fix accidental deletion of G18OEUKFR map
+[33m4c9ae2c65[m fix oeukfr map delete
+[33mc05b1f9aa[m Delete lib/engine/game/g_18_oe_uk_fr/map.rb
+[33ma792c6773[m AA84 Path fix
+[33mc2e33dd42[m Delete lib/test_game_init.rb
+[33maf4f0105e[m fix
+[33m0d22b05b3[m feaures
+[33m6cdb65f5b[m feaures
+[33m2fce42803[m feaures
+[33m2bbad699d[m Change REMAR to an assign ability
+[33m740e6f7d6[m Merge pull request #12480 from iwooden/fix-os-receivership
+[33mc441d553c[m More recommended changes
+[33m99950454a[m [1822 family] skip choice for doubling cash if the player order would remain unchanged
+[33mc0e5eb9a3[m [1835] implement vanilla starting package draft
+[33m54fe9054d[m Add hint on how to format code to DEVELOPMENT.md
+[33m8b330b047[m [18SJ] Redeem textual clarification, fixes #12496
+[33mb5a454aa8[m [1824] Improved bug fix for forced MR, fixes #12492
+[33m03a9b8194[m train.variant instead indirect via name
+[33m9957d5a2b[m Fixture update - game end reason
+[33m24e2d851d[m Bugfix 12518 and game spec
+[33mbd9d2e0c4[m last SQL tweak for front page game filter by @ollybh
+[33m60970a981[m Remove hard-coding in buyable_variants
+[33m1d2901496[m [1817] disable corporate actions when owner has to sell shares
+[33m556ee2fb1[m Merge pull request #12509 from ddaybell/1817-volatility-rules-link
+[33md8e63e85d[m [1817] Rename Volatility Rules link to 'Volatility Expansion Rules'
+[33m8212c0931[m Merge pull request #12507 from ddaybell/g-1880-capitalization-status
+[33m2c4d2046c[m link user to profile
+[33m18e270892[m adjusting format to make it consistent
+[33m4ad416068[m Fix RuboCop violations in status_array capitalization display
+[33mb3ffcd6cf[m Update lib/engine/game/g_1880/game.rb
+[33mb74f4c3cc[m [1835] properly label Ostbayern tiles and make Berlin upgradable later
+[33mbf5b56b9a[m Merge pull request #12499 from Witzman/InitMaptest
+[33md5da85408[m v21 fix
+[33m838ae59ce[m fixed accidental delete of UKFR map
+[33m9ff4d57c7[m [1840] Fix crash when all Y/O trains exhausted during CR1
+[33mc2e7999d7[m [1817] Add link to 1817: Volatility Rules on Info tab
+[33m120674d7e[m Rubocop fix
+[33md0b2783f0[m Emergency buy rules
+[33m7257a0a5d[m tweaks
+[33me083c7d12[m correct 'logical operator with unless' issue in last commit
+[33ma2c895bb9[m Delete lib/engine/game/g_18_oe_uk_fr/map.rb
+[33m447a2c56f[m changes to route step
+[33mc0d67cdfd[m route step - remove choosing, put tender_train in round_state
+[33m26dd35cb1[m linelength fix
+[33mac101f943[m Style updated
+[33m18d7adaba[m [1880] Show capitalization status on corporation charter card
+[33mbad7044a1[m last SQL tweak for front page game filter by @ollybh
+[33m2f8d50d1f[m [1822 Family] Remove extra slot created for destination token
+[33md66cf9d78[m Using train variant alternative approach
+[33m14fe55288[m Using  URLSearchParams to process "title=" collection instead of "title[]=".
+[33m57735404f[m Rubocop fix
+[33m5c19489b5[m trains.rb aktualisieren
+[33m13f68ea46[m bugfix
+[33m8e3197f0a[m Code refactoring
+[33me583b4980[m Showing also blank fields
+[33m3acb2192b[m #12344 Game data details
+[33mc9f370e81[m 18Cuba: log text corrected
+[33mac9d173ac[m 18Cuba: Adjustements based on review comments
+[33m4806d1c3a[m  # Add filter for live, async or all game modes
+[33mfc604cb92[m # New format for filtering multiple games URL via Ruby array params
+[33m9869ce514[m Merge branch 'master' into multi-title
+[33m677b5ed96[m map updates
+[33m224e4a5a1[m map updates
+[33m6b09246c7[m map updates
+[33m05dc7b778[m map updates
+[33m7f23aced2[m Merge pull request #15 from Witzman/18oenewmap
+[33m80f53b5b6[m Merge branch 'InitMaptest' into 18oenewmap
+[33m1e8c148cf[m newestmap
+[33m7b3bec7c8[m Merge pull request #14 from Witzman/18OE-Entities_and_Auction
+[33ma4a8aee86[m description layout
+[33m348c1a67e[m Merge pull request #13 from Witzman/18OE-Entities_and_Auction
+[33m7c950665d[m auction layout and svgs
+[33m1e3d5290d[m Merge pull request #12 from Witzman/18OE-Entities_and_Auction
+[33meb9c0e44d[m player count, entities, auction, privates, minors
+[33mdf1bb9545[m Merge branch 'tobymao:master' into 18OE-Initialize_and_Map
+[33me91a0308d[m Two bugs fixed in game.rb:   - setup: c.sym → c.id (Corporation has no .sym)   - after_par: corporation.sym → corporation.id
+[33m9017afa9d[m 18Cuba: train buy logic
+[33mf9c728438[m Merge pull request #12497 from ollybh/1840-issue-12493
+[33m5b0cfb52d[m Merge pull request #12483 from ollybh/18christmaseve-issue-12477
+[33mac93b967b[m Merge pull request #12484 from chrstas/18Cuba-Narrow-Gauge-Graph
+[33m8af554a61[m Merge pull request #12487 from ollybh/18neb-issue-12468
+[33mb01673815[m Merge pull request #12490 from philcampeau/fix-compile_lib
+[33ma5b105de2[m Merge pull request #11 from Witzman/myfork/18OE-startup_and_map
+[33m0e1f93d9a[m bugfix
+[33ma183db76c[m Merge pull request #10 from Witzman/18OE-map
+[33mb57f0ebe8[m Merge branch '18OE-Initialize_and_Map' into 18OE-map
+[33m037ad01f4[m Merge pull request #9 from Witzman/myfork/18OE-startup_and_map
+[33m1e09ef1f4[m Game startup
+[33mb8681c0af[m mapfixes
+[33m56fd29895[m mapfixes
+[33m3d98266c7[m mapfixes
+[33m1ea6a27ef[m mapfixes
+[33m51a99a0b9[m fix
+[33m36222a329[m test
+[33m887189f4a[m maptest
+[33ma88ca35d2[m Update map.rb
+[33m8bfcf7c3b[m fixes
+[33m068ddcf52[m fixes
+[33m5540710b2[m fixes
+[33m2d7fdaa02[m fixes
+[33m0048d0ce8[m fixes
+[33m7a3f5a087[m fixes
+[33m2949a55b7[m Initial map
+[33m01a3d41f8[m [1840] Stop market limit marker from being shown
+[33m2343d6a4c[m [System18 Gotland] Player value is affected by difficulty level
+[33mb8561d261[m Merge branch 'tobymao:master' into fix-compile_lib
+[33m330043482[m [assets] Fix compile_lib missing source map check
+[33m7fc13807e[m non ruby on rails fix
+[33mc05402651[m [18Neb] Fix max bid calculation in the initial auction
+[33mc47693ea3[m 18Cuba: clear_graph_for_entity
+[33m89b18bd98[m 18Cuba: Narrow Gauge Graph
+[33m4d5148b5d[m [18 Christmas Eve] Remove stock_market from GAME_END_CHECK
+[33m1390a52d4[m Fixing bug when encoding name with "."" like 1828.Games
+[33m3ca8a98d2[m Allows front page "Filter" to select multiple titles.
+[33md9355c48d[m Add fixture for only game_end condition
+[33m5b517dee6[m fix RSS receivership order for OS
+[33m7611d7d5d[m add guard to prevent blank passwords
+[33m4effeb917[m[33m ([m[1;33mtag: [m[1;33m2026-04-05_13.56.49[m[33m)[m Merge pull request #12479 from ollybh/1858-india
+[33m7e3051e54[m [1858 India] Fix typo in comment
+[33m62bc2fd8c[m Merge pull request #12465 from philcampeau/1817-bridge-warning
+[33mccc0d7626[m Merge pull request #12478 from tobymao/dependabot/bundler/rack-3.2.6
+[33m2d999c4c2[m Merge pull request #12470 from philcampeau/disable-ArrowUp-and-ArrowDown-hotkeys-unless-in-History-mode
+[33md109270a5[m Merge pull request #12467 from roseundy/rs_acq_bug
+[33m82a6553ab[m Merge pull request #12456 from sunfall/regloc-1850
+[33m5e61e169b[m Merge pull request #12455 from sunfall/regloc-1846
+[33m9eded09a2[m Merge pull request #12453 from sunfall/regloc-1828
+[33mdd6c06e98[m Merge pull request #12464 from sunfall/regloc-18soh
+[33m8dd0578bf[m Merge pull request #12463 from sunfall/regloc-18nl
+[33m3ae60b490[m Merge pull request #12461 from sunfall/regloc-18usa
+[33mbc49372fc[m Merge pull request #12460 from sunfall/regloc-18scan
+[33m08f054e01[m Merge pull request #12459 from sunfall/regloc-18jpt
+[33m1f3151333[m Merge pull request #12458 from sunfall/regloc-18hiawatha
+[33ma7685e8a1[m Merge pull request #12457 from sunfall/regloc-18dixie
+[33me53ad1dfe[m Merge pull request #12450 from sunfall/regloc-1822pnw
+[33me5a29d810[m Merge pull request #12449 from sunfall/regloc-1812
+[33md53256ba6[m Merge pull request #12448 from sunfall/regloc-18texas
+[33mfc3bc8d5d[m Merge pull request #12447 from sunfall/regloc-1860
+[33mbdc1f4898[m Merge pull request #12443 from ollybh/1841-issue-12439
+[33md61a28c3e[m Merge pull request #12442 from ollybh/18usa-issue-12441
+[33m8e17d2cae[m Merge pull request #12437 from philcampeau/system18---charters-shouldn't-count-against-cert-limit
+[33mf048a2511[m Merge pull request #12433 from philcampeau/21moon-emr-fix
+[33m3422e29f4[m Merge pull request #12431 from ollybh/1894-issue-12422
+[33md861e4205[m Merge pull request #12430 from chrstas/18Cuba-Tile-Laying
+[33m5f80dd8bb[m Merge pull request #12420 from perwestling/fix/12412
+[33m38a869d6c[m Merge pull request #12418 from ollybh/1868wy-issue-12417
+[33mc03f601f2[m add P4 icon, add to ASSIGNMENT_TOKENS constant
+[33m91de98720[m fix P4 and grammar edits to private descriptions
+[33m75e53023f[m issue with fixture due to minor change - removing
+[33m3b5800c7b[m First complete fixture
+[33m12744aefb[m Merge remote-tracking branch 'upstream/master' into 1858-india
+[33mb7210dd5d[m [1858 India] Add new fixture file
+[33mb90d81d96[m tweak P2 private's ability handling
+[33m6debbbf56[m minor code cleanup
+[33m231945b44[m Prevent last 8 train from triggering SR
+[33m7d1580104[m Display this game's signal_end_game event text
+[33me17b22c7f[m properly remove borders at communism phase
+[33m80294af7d[m Bump rack from 3.2.5 to 3.2.6
+[33md3817b75f[m add blocking step to track step for Malaxa assignment
+[33m6637148b8[m TR automatically receives ABC building permit
+[33m74f491ce9[m corrects price for P6 Malaxa Manufacturing Company
+[33ma11f0caea[m remove edge border if connecting track is built with P2
+[33m81bd24ac8[m creates parrer file, redefine methods accordingly
+[33mda426dedc[m hijack BCR code for TR in this game
+[33m04802583f[m fix FI assignment for TR corp
+[33m82d98b290[m 2 tile lays for corps as of green phase
+[33m6982553a8[m Remar ability shouldn't go away if assigned
+[33m539456a04[m fix tile lays and maximize autorouting calculation
+[33m2c2d95e1d[m mask company abilities on corps unless assigned
+[33mc988436b3[m fix routing for + trains
+[33m4b479bae8[m fix Remar assignment
+[33m105485cc6[m restrict B tile to Bucuresti
+[33m6c041f70b[m Foreign investors shouldn't display owner abilities
+[33m108c7a5b8[m little fix
+[33m5bd2b91e1[m [1832] pre-alpha updates
+[33m73c4352d5[m Implement P1, code cleanup, nearly ready for alpha
+[33mb156a4096[m Implements P5 remar
+[33m940d20c2b[m implements P6, minor description tweaks
+[33m451192703[m Merge pull request #12452 from ollybh/1822africa-issue-12432
+[33m8f6b2f65e[m [1858 India] Remove broken fixture file
+[33maf77f6b77[m [1858 India] Playtesting change: Pullmans cannot be bought across
+[33md6eaaee33[m [1858 India] Playtesting change: rename mail trains → Pullmans
+[33mc9b56144d[m [game_page] disable ArrowUp and ArrowDown hotkeys unless in History mode
+[33ma6ba389fd[m [1858] Add fixture files for quick start variant games
+[33maf2ebc5a5[m [1858 India] Quick start packages
+[33m2af3095ce[m RS: fix multiple receivership acquisitions
+[33m3cec9298f[m [1817] removes bridge warning if already assigned
+[33mca11c72ee[m [SOH] Remove 'The' from GAME_LOCATION
+[33mee10250af[m [18NL] Elide 'The' from GAME_LOCATION
+[33m64d35bdd7[m [18USA] Make GAME_LOCATION provide information
+[33m411a10f3f[m [18USA] Add 'of America' to GAME_LOCATION
+[33m90ec33062[m [18Scan] Capitalize 'Peninsula' in GAME_LOCATION
+[33m1e731cdac[m [18JP-T] Add 'Japan' to GAME_LOCATION
+[33mfb6b81388[m [18Hiawatha] GAME_LOCATION to 'Midwestern USA'
+[33m62dc7059e[m [18Dixie] Regularize GAME_LOCATION
+[33m796bd6a8c[m Merge pull request #12454 from sunfall/regloc-1840
+[33m5d639d811[m [1850] Elide article from GAME_LOCATION
+[33m43c6f7fa0[m [1846] Change GAME_LOCATION to Midwestern USA
+[33m57f5cc10c[m [1840] Change hyphen in GAME_LOCATION to a comma
+[33m6284b1d05[m [1828.g] GAME_LOCATION to 'Northeastern USA'
+[33m001d03118[m [1822Africa] Add fixture and unit tests for game end override
+[33m2fbb8a874[m [1822PNW] Add 'USA' to GAME_LOCATION
+[33m3f22cbfc7[m [1812] Change North-East to North Eastern England
+[33m614d24cc0[m [18Texas] Change to USA in GAME_LOCATION
+[33m4bd16ca47[m [1860] Add England to GAME_LOCATION
+[33mca028f924[m [1822Africa] Changed fixture file for empty bid box game end trigger
+[33m95f052559[m [1822Africa] Stock market game end overrides empty bid boxes
+[33me3403d807[m [1841] Add 'Bayard' to the description of concession 1
+[33m4d20f1ead[m [18USA] Enforce track stubs connect to New York City
+[33m6cf77fd16[m 18Cuba: selector hex not known issue
+[33m2c5464323[m 18Cuba: all_potential_tiles logic
+[33m4dbc0a0f4[m 18Cuba: Review adjustments
+[33md5145f482[m [System18] Charters shouldn't count agaist cert limit
+[33mf3035a8bd[m [core] add webhook user checks to Create Account page
+[33m76a82609f[m [1858 India] Playtesting changes: extra terrain
+[33ma112d8cf6[m [1858 India] Playtesting changes: increased cost for M trains
+[33mc56afa89b[m [1858 India] Make a deep copy of 1858's train definitions
+[33me336871cf[m [21Moon] Enforce game's EMR rules properly.
+[33mc50eb1f67[m [1894] Clear active step after adding pending home token
+[33m4a3451a55[m TODO FC added
+[33ma4df20b9c[m 18Cuba: Tile laying yellow
+[33m8f5e10303[m Merge pull request #12427 from ollybh/1840-issue-12426
+[33me5d5dbb94[m [1840] Fix spelling in log message
+[33me16029503[m Remove restriction on cross buy - incorrect
+[33m9d25382a1[m Correct some constants to make correct Emergency behavior
+[33mbcf535d3b[m Fix review comments
+[33m6beca5598[m Merge pull request #12419 from chrstas/Core-Tile-512
+[33mb9b8edde7[m Merge pull request #12414 from ollybh/remove-old-news
+[33m557299419[m Merge pull request #12410 from ollybh/18norway-issue-12407
+[33m05ae27cf2[m Merge pull request #12339 from chrstas/18RG-variants-Y8
+[33me0d8c7d51[m Removed debug printout
+[33mbcec3cbb9[m Fix emergency financing
+[33md011b4358[m Implement can_dump? to get correct amount for EMR
+[33mb272cf31b[m Only use depot trains during EMR #12412
+[33mbb9e0e66a[m Rubocop fixes
+[33mc74e9228b[m 18Texas use shared definition of tile 512
+[33m6b2d1b23b[m Tile 512 move to config/tile
+[33medcc5f46c[m [1868WY] Clear `city_towns` when making ghost town
+[33m47a838eb3[m Merge pull request #12408 from chrstas/18Cuba-Home-Token
+[33m2ee914186[m [Front page] Remove old news
+[33mbc07de36e[m 18Cuba: Reviewer comments - ensure minor restrictions are not applied for FEC
+[33md9753dd32[m Rubocop fix
+[33mff86067c7[m 18Cuba: Tile correction 512 and slots on L tiles
+[33m1ee61d427[m 18Cuba:  Reviewer adjustments: HomeToken :par (minor) :operate (major), restrict minor home token locations
+[33m5d78c7d2a[m [18Norway] Remove V’s free ship ability when used
+[33meb9a242d2[m 18Cuba: Rubocop fix
+[33m1642c2cd6[m 18Cuba: Refactored Home Token - getting rid of cheater
+[33mca335f6fb[m 18Cuba: Rubocop
+[33m9028fafff[m 18Cuba: removing double defined hexes
+[33me9981d95a[m 18Cuba: Rubocop  issue fixed
+[33m63028cbc4[m G18Cuba: HomeToken, separate Trains in module
+[33m14a84b72b[m 18Cuba: Map Update
+[33mdc8c2aaab[m Merge pull request #12383 from chrstas/18Cuba-Par-Minor-with-Concession
+[33mc12130a6c[m Merge pull request #12391 from perwestling/fix/12330
+[33m11ab29085[m Merge pull request #12397 from tobymao/dependabot/bundler/rack-3.2.5
+[33mda3fdf245[m Merge pull request #12390 from ollybh/1824-issue-12384
+[33ma4a056d8d[m remove dummy companies, implement P4 ability
+[33m8d66f6aec[m implements P3 ability
+[33m096a3cb71[m 2 fixes of presentation (Sarajevo and Mines)
+[33mad8a7c830[m reintegrate TRAINS and PHASES into game.rb
+[33mdc417c83d[m implement P7 ability
+[33m95f82dcce[m restore call to modify_borders method
+[33mb960e1bab[m add private co. number to name for easy ID
+[33m538d14c3d[m Prevent misplacement of Bucharest tile L148
+[33m907059e2d[m updates based on first round of comments
+[33m29b66fced[m 18Cuba: substitute available_cash with less invasive logic in can_buy
+[33m7d061d887[m Merge branch 'tobymao:master' into 1880-romania-updates
+[33mbde529daf[m reverts changes to tiles 8858 and 8858a
+[33mf5bdcf2d9[m Bump rack from 3.2.3 to 3.2.5
+[33m06acd6797[m updates to trains and track
+[33mae4a7a9f4[m [1880Romania] pre-alpha updates
+[33ma8bf01db9[m [1824] Remove unneeded code
+[33m854a9e494[m Remove duplicates for offboards
+[33mf2c0ada31[m [1824] Make blocking icon gray
+[33m0c8aa4e8a[m [1824] Assign national presidency with equal shareholding
+[33mb401f796e[m 18Cuba: method refactoring and comments
+[33m8e1556d2d[m 18Cuba: Edge case with player that has low cash but concession
+[33m152f548e4[m [1824] Fix minor misspelling.
+[33m0fff798b1[m 18Cuba: changing to buyable false + bug fixes
+[33me4c7a7a94[m 18Cuba: Rules reviewed again. Restriction to president of minor unnecessary
+[33m1da4f5ffb[m 18Cuba: Condition can_buy adjusted
+[33me26ca8ae5[m 18Cuba: adjusting according reveiwer comment
+[33m623df28a9[m 18Cuba: Par minors by concession exchange
+[33m1f6096008[m Merge pull request #12372 from philcampeau/1880-Romania
+[33m787d2bcd7[m Merge pull request #12371 from chrstas/18Cuba-Draft-Commissoner
+[33mb592ef8f4[m Merge pull request #12369 from philcampeau/S18-gotland-map-fix
+[33mfbc6ae6a3[m Merge pull request #12381 from ollybh/system18-gotland-issue-12379
+[33m4b65dc353[m 18Cuba: adapting logic for 2-3 players and change to company type
+[33m20825152b[m [System18 Gotland] 4-trains are rusted by 8-trains
+[33m7499baed9[m[33m ([m[1;33mtag: [m[1;33m2026-02-02_21.02.53[m[33m)[m Merge pull request #12376 from ollybh/21moon-issue-12375
+[33m549f9cd15[m Merge pull request #12378 from perwestling/add_kickstarter_link_for_1880_romania
+[33m8fe26b081[m URGENT: Add Kickstarter link to front page
+[33m274427dda[m various touchups
+[33m88ec6d23c[m add missing coordinates for Bess
+[33maf29957f0[m removes todos and fixes indentation in meta.rb
+[33m0e0dc7e9b[m fixes tile orientations
+[33m6547a9064[m add simple logos for all corps
+[33m25305da45[m 18Cuba: Adding possibility to pass concession draft
+[33mb50e81832[m 18Cuba: removing comment
+[33m3c4710023[m 18Cuba: incoporating requested changes and switch to simple_draft class
+[33m3945f2954[m Merge pull request #12365 from jakub-lore/fix-issue-#11765
+[33m40d7d12bb[m Merge pull request #12373 from ollybh/system18-gotland-issue-12367
+[33m9e9a36455[m [21Moon] Prevent buying trains across during EMR
+[33mfe6abda46[m [System18 Gotland] Don't increment @turn after nationalization round
+[33mcd32a6706[m Merge branch 'tobymao:master' into 1880-Romania
+[33mc5035c98e[m [1880 Romania] initial commit
+[33mfd59c67ed[m fix: linting issues in lib/engine/game/g_18_co/game.rb
+[33m17ea90e57[m Update lib/engine/game/g_18_co/game.rb
+[33mc6912597a[m 18Cuba: Rubocop correction
+[33mb6404f587[m 18Cuba: Auction and Draft mechanism for commssions and concessions
+[33me452c4ed5[m Merge pull request #12364 from chrstas/18Cuba-Sugar-Production-New
+[33m337efe42c[m [System18] Gotland - removes last bit of narrow track
+[33mb9aad2b81[m Fixed issue in Event: Home station reservations removed
+[33m1dbf2827b[m 18Cuba: Include suggested changes after review
+[33m5933dd678[m[33m ([m[1;33mtag: [m[1;33m2026-01-25_15.18.56[m[33m)[m Merge pull request #12320 from caius/cd/rubyopt-compose
+[33m6d66f739f[m 18Cuba: sugar production logic
+[33me83e98f7b[m Merge pull request #12337 from ollybh/1807-mergers-takovers
+[33m83bff8e80[m Merge pull request #12317 from perwestling/fix/12228
+[33maf2654dbf[m Merge pull request #12362 from ollybh/18usa-issue-12360
+[33m66209ef54[m [1824] Correct floating for non-parred regional, fixes #12228, #12275
+[33m28c3e4af2[m [18USA] Unlmited 8-trains and Pullman cars
+[33m9917cd438[m Merge pull request #12117 from perwestling/feature/1862/continued_work_on_1862_solo_first_sr
+[33m47d5acbd4[m Merge pull request #12319 from ollybh/18ardennes-unlimited-trains
+[33m2bc38a7b5[m Merge pull request #12331 from perwestling/fix/12226
+[33m375993665[m Merge pull request #12356 from chrstas/18Cuba-fixes-tiles
+[33m085063a4d[m Corrections after review comments
+[33m94ffc582e[m [1824] Correct president share assignment and owner ship of national
+[33mf7e5ad94a[m 18Cuba: Fix to logo path
+[33mc75758e93[m 18Cuba: Fix double sided tiles
+[33ma0da04041[m 18RoyalGorge - adjustments after review
+[33m1a04100b6[m Merge remote-tracking branch 'upstream/master' into 1807-mergers-takovers
+[33me3b1af34b[m Merge pull request #12353 from chrstas/18Cuba-Narrow-Trains
+[33mc978b1484[m Fix review comments
+[33mc3388ac99[m Merge branch '18Cuba-Narrow-Trains' of https://github.com/chrstas/18xx into 18Cuba-Narrow-Trains
+[33m13b5d9205[m [18Cuba] track_type for variant was missing - corrected
+[33m7f27c6a33[m Revert "[18Cuba] track_type for variant was missing"
+[33mf8cfbb164[m Revert "Delete .bundle/config"
+[33m97084a072[m Delete .bundle/config
+[33m904ed062b[m [18Cuba] track_type for variant was missing
+[33m4bfa7fc62[m [18Cuba] Changing to track_type
+[33m783c98437[m 18Cuba: adjusted train assignment and standard gauge
+[33mff82ff313[m Merge pull request #12346 from perwestling/fix/12343
+[33m7cc3b432b[m Merge pull request #12336 from ollybh/log-message-remove-space
+[33mc865d9c60[m Merge pull request #12333 from philcampeau/18Norway-clarify-fees
+[33m9f2f45410[m Merge pull request #12332 from perwestling/fix/12173
+[33m8e88c35ca[m Merge pull request #12328 from philcampeau/TOP1871-fix-split-token-pass
+[33m7b60d9602[m Merge pull request #12325 from perwestling/fix/12324
+[33md02f58c5a[m Merge pull request #12323 from ollybh/1867-refactoring
+[33m273235060[m Merge pull request #12321 from ollybh/share-bundle-errors
+[33m9c620c89f[m Merge pull request #12316 from ollybh/1870-issue-12312
+[33m18b19033c[m Merge pull request #12313 from ollybh/1861-1867-cleanups

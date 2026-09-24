@@ -41,7 +41,10 @@ module Engine
 
         CURRENCY_FORMAT_STR = '$%s'
 
-        BANK_CASH = 4_000   #7_0000
+        # Sugestao Claude - banco varia por numero de jogadores (18Junta
+        # Regras 2.1, "Partidas em 2 Jogadores", item 6). bank_starting_cash
+        # (motor generico) ja suporta Hash nativamente: cash[players.size].
+        BANK_CASH = { 2 => 5_000, 3 => 7_000, 4 => 7_000 }.freeze
 
         CERT_LIMIT = { 2 => 22, 3 => 16, 4 => 14 }.freeze
 
@@ -370,6 +373,20 @@ module Engine
         # antes de #setup) -- se essa seleção rodasse só em #setup, o
         # PrivateAuction já teria tirado sua foto de @game.companies com as
         # 13 privadas, e a redução pra 6 (ou 5) nunca apareceria na tela.
+        # Sugestao Claude - remove 1 trem-2, 1 trem-3 e 1 trem-4 das pilhas
+        # em partidas de 2 jogadores (18Junta Regras 2.1, item 2).
+        def game_trains
+          return self.class::TRAINS unless two_player?
+
+          self.class::TRAINS.map do |train|
+            if %w[2 3 4].include?(train[:name])
+              train.merge(num: train[:num] - 1)
+            else
+              train
+            end
+          end
+        end
+
         def select_game_entities!
           # Guarda de idempotência: Engine::Game::Base#next_round! (motor,
           # não deste jogo) faz "case @round ... when init_round.class" pra
@@ -387,6 +404,17 @@ module Engine
           return if @game_entities_selected
 
           @game_entities_selected = true
+
+          # Sugestao Claude - Companhia H nunca entra em partidas de 2
+          # jogadores (18Junta Regras 2.1, item 3), removida antes do
+          # sorteio normal de mais uma companhia (item 4).
+          if two_player?
+            h_corp = @corporations.find { |c| c.name == 'H' }
+            if h_corp
+              @corporations.delete(h_corp)
+              @log << 'Corporation not used in this game (2 players): H'
+            end
+          end
 
           # Sorteia 1 corporação para ficar fora da partida. Usa o gerador
           # de números pseudoaleatórios do próprio jogo (rand/sort_by { rand
