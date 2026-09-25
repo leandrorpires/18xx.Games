@@ -48,7 +48,7 @@ module Engine
                   'pode fazê-lo sem pegar a ficha, descartando-a do jogo. Nesse caso, a companhia não pagará o custo '\
                   'de $30, nem haverá qualquer mudança na trilha de estabilidade política.',
             color: nil,
-            meta: { present: true },
+            meta: { present: false },
           },
                     {
                 name: '(D) Ferramenteria Ochoa',
@@ -129,7 +129,7 @@ module Engine
             desc: 'Durante as rodadas de operação, ao calcular o alcance e receita de suas rotas, a companhia '\
                   'proprietária pode ignorar a contagem de hexágonos de vila, para um ou mais de seus trens.',
             color: nil,
-            meta: { present: true },
+            meta: { present: false },
           },
           {
             name: '(H) Muñoz Investimentos',
@@ -139,7 +139,7 @@ module Engine
             desc: 'Sempre que a companhia proprietária pagar dividendos em valor igual ou maior que o dobro de seu '\
                   'valor de mercado, o banco paga 10% extra diretamente para o caixa da companhia.',
             color: nil,
-            meta: { present: true },
+            meta: { present: false },
           },
           {
             name: '(I) Orejuela Abogados',
@@ -149,7 +149,7 @@ module Engine
             desc: 'No momento da resolução do golpe, a companhia proprietária pode descartar uma de suas fichas de '\
                   'apoio/rejeição ao golpe.',
             color: nil,
-            meta: { present: true },
+            meta: { present: false },
           },
           {
             name: '(J) Sanchez Ingeniería',

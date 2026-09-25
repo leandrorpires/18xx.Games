@@ -33,6 +33,19 @@ module Engine
           two_player? ? Map2P::HEXES_2P : game_hexes
         end
 
+        # Sugestao Claude - cidade-base da Cia C muda de E3 (3-4p) para F4
+        # (2p, mapa reduzido) -- E3 nem existe mais no mapa de 2 jogadores.
+        # Sobrescreve game_corporations (mesmo gancho de game_hexes),
+        # gerando uma copia com .merge (NUNCA muta a constante CORPORATIONS
+        # compartilhada entre partidas).
+        def game_corporations
+          return self.class::CORPORATIONS unless two_player?
+
+          self.class::CORPORATIONS.map do |corp|
+            corp[:sym] == 'C' ? corp.merge(coordinates: 'F4') : corp
+          end
+        end
+
         # Sugestao Claude - nomes de local (Don Ramon/San Miguel) mudam de
         # coordenada no mapa de 2 jogadores (map_2p.rb).
         def location_name(coord)
