@@ -208,9 +208,9 @@ module Engine
         # PARAMILITAR_FEE = 30
 
         
-        # Trilha política (18Junta Regras 2.1, 4.10 / tabuleiro): de -4
-        # (Mil4) a +4 (Civ4), 0 é o espaço Neutro inicial.
-        POLITICAL_TRACK_LIMIT = 4
+        # Trilha política (18Junta Regras 2.1, 4.10 / tabuleiro): de -5
+        # (Mil5) a +5 (Civ5), 0 é o espaço Neutro inicial.
+        POLITICAL_TRACK_LIMIT = 5
         # rev. 2.8, 6.1: a partir do espaço 3 de um lado, um movimento
         # para o lado oposto anda 2 espaços em vez de 1.
         RADICAL_THRESHOLD = 3
