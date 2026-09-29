@@ -67,7 +67,7 @@ module Engine
 
         MUST_SELL_IN_BLOCKS = false
 
-        SELL_BUY_ORDER = :sell_buy_or_buy_sell
+        SELL_BUY_ORDER = :sell_buy_sell
 
         POOL_SHARE_LIMIT = 50 # 5 certificados por companhia no banco
 
@@ -158,6 +158,7 @@ module Engine
             distance: 8,
             price: 900,
             num: 9,
+            available_on: '6',
             discount: { '4' => 750, '5' => 750, '6' => 750 },
           },
           {
@@ -165,12 +166,13 @@ module Engine
             distance: 999,
             price: 1_100,
             num: 9,
+            available_on: '6',
             discount: { '4' => 800, '5' => 800, '6' => 800 },
           },
         ].freeze
 
         EBUY_PRES_SWAP = false
-        EBUY_FROM_OTHERS = :never
+        EBUY_FROM_OTHERS = :value
         HOME_TOKEN_TIMING = :float
 
         # Saco de corrupção (18Junta Regras 2.1, 4.8): composição inicial, e
@@ -209,6 +211,9 @@ module Engine
         # Trilha política (18Junta Regras 2.1, 4.10 / tabuleiro): de -4
         # (Mil4) a +4 (Civ4), 0 é o espaço Neutro inicial.
         POLITICAL_TRACK_LIMIT = 4
+        # rev. 2.8, 6.1: a partir do espaço 3 de um lado, um movimento
+        # para o lado oposto anda 2 espaços em vez de 1.
+        RADICAL_THRESHOLD = 3
 
         # Bônus por ficha verde (Ditadura) na tentativa de golpe (18Junta
         # Regras 2.1, 4.10.2).
@@ -510,10 +515,14 @@ module Engine
         # Também é aqui que a compra de um trem-5 revela a carta de situação
         # política (18Junta Regras 2.1, 4.10/5, fase 5).
         def buy_train(operator, train, price = nil)
-          depleting = train.from_depot? && @depot.upcoming.count { |t| t.name == train.name } == 1
+          # rev. 2.8, 1.5: só um trem-5 comprado da oferta revela carta.
+          # from_depot? precisa ser lido antes do super, porque depois da
+          # compra o trem já pertence à companhia.
+          from_depot = train.from_depot?
+          depleting = from_depot && @depot.upcoming.count { |t| t.name == train.name } == 1
           super
           refill_corruption_bag!(train.name) if depleting
-          reveal_political_situation_card! if train.name == '5' && !coup_resolved?
+          reveal_political_situation_card! if train.name == '5' && from_depot && !coup_resolved?
         end
 
         def refill_corruption_bag!(train_name)
@@ -527,9 +536,10 @@ module Engine
         end
 
         def draw_corruption_token!
+          # rev. 2.8, 5.1: com o saco vazio, a ficha vem preta do estoque.
           if @corruption_bag.empty?
-            @log << 'Saco de corrupção está vazio'
-            return nil
+            @log << 'Saco de corrupção vazio: a ficha vem preta do estoque'
+            return :black
           end
 
           @corruption_bag.pop
@@ -1139,7 +1149,8 @@ module Engine
         # do lado escolhido (confirmado pelo designer).
         def move_political_track!(side)
           limit = self.class::POLITICAL_TRACK_LIMIT
-          radical_opposite = side == :civil ? @political_track <= -limit : @political_track >= limit
+          threshold = self.class::RADICAL_THRESHOLD
+          radical_opposite = side == :civil ? @political_track <= -threshold : @political_track >= threshold
           delta = (radical_opposite ? 2 : 1) * (side == :civil ? 1 : -1)
           new_position = @political_track + delta
           new_position += (side == :civil ? 1 : -1) if new_position.zero? && !@political_track.zero?

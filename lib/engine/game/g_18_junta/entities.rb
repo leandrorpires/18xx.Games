@@ -115,7 +115,7 @@ module Engine
               hexes: [],           # [] = qualquer hex acessível
               tiles: [],           # [] = qualquer tile normal
               when: 'track',    #teste do Claude para só aparecer na fase de construção
-              count: 1,
+              count_per_or: 1,  # rev. 2.8: uma vez por rodada de operações
               cost: 25,
               reachable: true,
               special: false,

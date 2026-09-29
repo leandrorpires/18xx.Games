@@ -73,10 +73,9 @@ module Engine
             highest_bid(company).price + min_increment
           end
 
-          def max_bid(player, company)
-            opening_bid = !@bids[company] || @bids[company].empty?
-            return [forced_max_bid(company), player.cash].min if @forced_round && opening_bid
-
+          # rev. 2.8, 2.1: no leilão com desconto, o lance de abertura é de
+          # pelo menos metade do valor (ver forced_min_bid), sem teto.
+          def max_bid(player, _company)
             player.cash
           end
 
@@ -147,11 +146,7 @@ module Engine
           private
 
           def forced_min_bid(company)
-            @forced_round ? 1 : company.min_bid
-          end
-
-          def forced_max_bid(company)
-            (company.min_bid / 2.0).ceil
+            @forced_round ? (company.min_bid / 2.0).ceil : company.min_bid
           end
 
           def add_bid(bid)
