@@ -1501,8 +1501,16 @@ status << ["Militar x#{alignment[:militar]}", 'militar_support'] if alignment[:m
           return super unless @round.is_a?(Engine::Round::Auction) && rev_2_8?
 
           richest = @players.max_by(&:cash)
+          tied = @players.select { |p| p.cash == richest.cash } - [richest]
           @players.rotate!(@players.index(richest))
-          @log << "#{richest.name} tem a prioridade (mais dinheiro após o leilão)"
+
+          msg = "#{richest.name} tem a prioridade (mais dinheiro após o leilão)."
+          unless tied.empty?
+            names = tied.map(&:name)
+            names = names.size == 1 ? names.first : "#{names[0..-2].join(', ')} e #{names.last}"
+            msg += " Empatado com #{names}, o desempate foi pela ordem da mesa."
+          end
+          @log << msg
         end
 
         def new_auction_round
