@@ -229,7 +229,7 @@ module Engine
             name: 'Barrizal',
             logo: '18_junta/B',
             simple_logo: '18_junta/B.alt',
-            tokens: [0, 40, 80, 80],
+            tokens: [0, 40, 80, 120],
             max_ownership_percent: 60,
             float_percent: 50,
             coordinates: 'D10',
