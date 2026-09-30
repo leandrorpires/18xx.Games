@@ -1482,6 +1482,29 @@ status << ["Militar x#{alignment[:militar]}", 'militar_support'] if alignment[:m
         end
 
         # Leilão inicial das empresas privadas (18Junta Regras 2.1, 6.1).
+        # Jogos criados antes da rev. 2.8 mantêm a prioridade do 1830 depois do
+        # leilão, para não quebrar partidas em andamento.
+        FIRST_GAME_REV_2_8 = 27
+
+        def rev_2_8?
+          id = @id.to_s
+          # Jogos locais (hotseat) têm identificador com letras: seguem a regra nova.
+          return true unless id.match?(/\A\d+\z/)
+
+          id.to_i >= FIRST_GAME_REV_2_8
+        end
+
+        # 18Junta: depois do leilão inicial, a prioridade vai para o jogador com
+        # mais dinheiro; a ordem dos assentos continua a mesma. Em caso de empate,
+        # fica com o primeiro deles na ordem atual da mesa.
+        def reorder_players(order = nil, log_player_order: false)
+          return super unless @round.is_a?(Engine::Round::Auction) && rev_2_8?
+
+          richest = @players.max_by(&:cash)
+          @players.rotate!(@players.index(richest))
+          @log << "#{richest.name} tem a prioridade (mais dinheiro após o leilão)"
+        end
+
         def new_auction_round
           select_game_entities!
           Round::Auction.new(self, [G18Junta::Step::PrivateAuction])
