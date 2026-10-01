@@ -173,6 +173,8 @@ module Engine
 
         EBUY_PRES_SWAP = false
         EBUY_FROM_OTHERS = :value
+        # 18Junta: trens só podem ser comprados de companhias do mesmo presidente.
+        ALLOW_TRAIN_BUY_FROM_OTHER_PLAYERS = false
         HOME_TOKEN_TIMING = :float
 
         # Saco de corrupção (18Junta Regras 2.1, 4.8): composição inicial, e
