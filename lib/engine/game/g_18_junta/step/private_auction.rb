@@ -123,7 +123,7 @@ module Engine
                 @forced_round = true
                 @consecutive_choosing_passes = 0
                 @round.next_entity_index!
-                @log << "#{entities[entity_index].name} pode abrir um leilão por até metade do valor de uma "\
+                @log << "#{entities[entity_index].name} pode abrir um leilão por pelo menos metade do valor de uma "\
                         'privada remanescente'
               end
             end

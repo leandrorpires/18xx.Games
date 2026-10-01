@@ -1489,7 +1489,7 @@ status << ["Militar x#{alignment[:militar]}", 'militar_support'] if alignment[:m
         def rev_2_8?
           id = @id.to_s
           # Jogos locais (hotseat) têm identificador com letras: seguem a regra nova.
-          return true unless id.match?(/\A\d+\z/)
+          return true unless id.match?(/^\d+$/)
 
           id.to_i >= FIRST_GAME_REV_2_8
         end
