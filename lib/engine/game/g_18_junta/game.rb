@@ -159,7 +159,7 @@ module Engine
             price: 900,
             num: 9,
             available_on: '6',
-            discount: { '4' => 750, '5' => 750, '6' => 750 },
+            discount: { '4' => 150, '5' => 150, '6' => 150 },
           },
           {
             name: 'D',
@@ -167,7 +167,7 @@ module Engine
             price: 1_100,
             num: 9,
             available_on: '6',
-            discount: { '4' => 800, '5' => 800, '6' => 800 },
+            discount: { '4' => 300, '5' => 300, '6' => 300 },
           },
         ].freeze
 
@@ -806,6 +806,7 @@ module Engine
 
         def apply_democracia_effects!
           remove_train_type_from_depot!('8')
+          remove_phase!('8')
 
           beneficiados = floated_corporations.select { |corp| @corporation_alignment[corp][:civil].positive? }
           unless beneficiados.empty?
@@ -839,6 +840,21 @@ module Engine
 
         def remove_train_type_from_depot!(train_name)
           @depot.upcoming.select { |t| t.name == train_name }.dup.each { |t| @depot.remove_train(t) }
+        end
+
+        # As fases avançam em sequência e a '8' vem antes da 'D' (18Junta
+        # Regras 6.4): sem tirar a '8' da lista, o primeiro trem D da
+        # Democracia nunca abriria a fase D (cinza). Cada jogo usa sua própria
+        # cópia de PHASES (ver game_phases), então isso não afeta outros jogos.
+        def remove_phase!(phase_name)
+          return if @phase.name == phase_name
+
+          @phase.phases.reject! { |phase| phase[:name] == phase_name }
+          @phase.next_on = Array(@phase.upcoming&.dig(:on))
+        end
+
+        def game_phases
+          self.class::PHASES.dup
         end
 
         # Ditadura (18Junta Regras 2.1, Apêndice): as 4 fronteiras (hexágonos
@@ -1166,7 +1182,6 @@ module Engine
 
         
 
-          @log << "Trilha poli­tica agora em #{political_track_label}"
         end
 
 
@@ -1481,6 +1496,19 @@ status << ["Militar x#{alignment[:militar]}", 'militar_support'] if alignment[:m
 
         def expire_stale_upgrade_licenses!
           @upgrade_licenses.reject! { |_corporation, valid_on_round| valid_on_round < @or_round_number }
+        end
+
+        # Desempate final (18Junta Regras 9.3): maior patrimônio; depois menos
+        # fichas pretas; depois menos fichas brancas.
+        def result
+          result_players
+            .each_with_index
+            .sort_by do |p, index|
+              tokens = @corruption_tokens.key?(p) ? @corruption_tokens[p] : { white: 0, black: 0 }
+              [-player_value(p), tokens[:black], tokens[:white], index]
+            end
+            .map { |p, _| [p.id, player_value(p)] }
+            .to_h
         end
 
         # Leilão inicial das empresas privadas (18Junta Regras 2.1, 6.1).
