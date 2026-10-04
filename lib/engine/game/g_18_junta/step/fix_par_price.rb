@@ -92,6 +92,10 @@ module Engine
           def pending_actor
             return nil unless @game.private_a_usable_this_stock_round?
             return nil if @round.private_a_resolved
+            # rev. 2.8: se todas as companhias já têm preço de par, não há o que
+            # fixar; sem isso, quem aceitava ficava sem saída (toda companhia era
+            # recusada e passar também).
+            return nil if @game.rev_2_8? && @game.corporations.all?(&:ipoed)
 
             @game.private_a_owner
           end
