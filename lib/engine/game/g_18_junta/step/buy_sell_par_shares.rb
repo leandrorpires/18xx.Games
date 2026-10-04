@@ -16,6 +16,25 @@ module Engine
 
             super
           end
+
+          # rev. 2.8 (BUG-13/14): o motor valida o preço de abertura que a
+          # interface já restringe -- o fixado pela (A), se houver; senão um
+          # preço de par oferecido por get_par_prices. A validação vem antes
+          # do super, para não deixar o preço de par gravado na companhia.
+          def process_par(action)
+            if @game.rev_2_8?
+              price = action.share_price
+              valid = get_par_prices(action.entity, action.corporation)
+              unless price && valid.any? { |p| p.price == price.price && p.coordinates == price.coordinates }
+                fixed = @game.fixed_par_price_for(action.corporation)
+                raise GameError, "#{action.corporation.name} tem o preço de Oferta Inicial fixado em "\
+                                 "#{@game.format_currency(fixed.price)} (privada (A))" if fixed
+                raise GameError, "Preço de abertura inválido: #{price ? @game.format_currency(price.price) : 'nenhum'}"
+              end
+            end
+
+            super
+          end
         end
       end
     end

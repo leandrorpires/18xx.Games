@@ -55,7 +55,11 @@ module Engine
 
           def process_choose(action)
             @game.resolve_paramilitar_choice!(action.entity, action.choice)
-            pass!
+            # rev. 2.8: o passo fica antes do Track e pode ser necessário
+            # duas vezes no mesmo turno (trilho da (F) e trilho normal em
+            # dois hexágonos de paramilitar); sem pendência ele não bloqueia
+            # nem oferece ações, então não precisa passar.
+            pass! unless @game.rev_2_8?
           end
         end
       end

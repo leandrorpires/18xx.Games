@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../../../step/track'
+require_relative 'track_hooks'
 
 module Engine
   module Game
@@ -17,6 +18,7 @@ module Engine
         #   constrói/aprimora um trilho num hexágono de paramilitar ainda não
         #   reclamado; a resolução em si acontece no passo ParamilitarChoice.
         class Track < Engine::Step::Track
+          include TrackHooks
 
 
 # ## Leandro tentou inserir por sugestão do Chatgpt, para permitir passar sem colocar track... NÃO FUNCIONOU
@@ -55,7 +57,22 @@ module Engine
           def process_pass(action)
             super
 
-            expire_license_if_turn_ended(action.entity)
+            # rev. 2.8, 4.2 (BUG-12): a licença não usada expira no fim do
+            # passo de trilho, mesmo quando a companhia passa sem construir
+            # -- depois do pass, can_lay_tile? continua verdadeiro.
+            if @game.rev_2_8?
+              @game.expire_upgrade_license_if_unused!(action.entity)
+            else
+              expire_license_if_turn_ended(action.entity)
+            end
+          end
+
+          # rev. 2.8, 4.2 (BUG-12): idem quando o passo é pulado porque a
+          # companhia não tem nenhum trilho possível.
+          def skip!
+            entity = current_entity
+            super
+            @game.expire_upgrade_license_if_unused!(entity) if @game.rev_2_8? && entity&.corporation?
           end
 
           private
@@ -70,19 +87,6 @@ module Engine
             @game.expire_upgrade_license_if_unused!(entity)
           end
 
-            #Correção sugerida pelo Claude para todo upgrade precisar de licença ou ganhar corrupção.
-            def consume_license_if_upgraded(action)
-              return unless @round.upgraded_track
-
-              entity = action.entity
-              if @game.consume_upgrade_license!(entity)
-                @log << "#{entity.name} usa a licença de aprimoramento (não sorteia ficha de corrupção)"
-              else
-                draw_corruption_token_for_upgrade!(entity)
-              end
-            end
-
-
           # Iteração onde upgrades só precisavam de licença depois do golpe
           # def consume_license_if_upgraded(action)
           #   return unless @round.upgraded_track
@@ -95,25 +99,9 @@ module Engine
           #   end
           # end
 
-
-
-
-          def draw_corruption_token_for_upgrade!(entity)
-            president = entity.owner
-            colors = @game.draw_corruption_tokens!(president, max_draws: 1)
-            return if colors.empty?
-
-            color_name = colors.first == :white ? 'branca' : 'preta'
-            @log << "#{president.name} recebe ficha aleatória de corrupção por fazer upgrade sem licença: "\
-                    "Sorteada ficha #{color_name}"
-          end
-
-          def flag_paramilitar_hex_if_needed(action)
-            hex = action.hex
-            return unless @game.paramilitar_hex_unclaimed?(hex)
-
-            @game.flag_paramilitar_hex_pending!(hex, action.entity)
-          end
+          # consume_license_if_upgraded, draw_corruption_token_for_upgrade! e
+          # flag_paramilitar_hex_if_needed estão em TrackHooks (track_hooks.rb),
+          # compartilhados com o trilho da privada (F).
         end
       end
     end

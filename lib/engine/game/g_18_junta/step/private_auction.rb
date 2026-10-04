@@ -130,6 +130,11 @@ module Engine
           end
 
           def process_bid(action)
+            # rev. 2.8 (decisão do designer): todos os lances são múltiplos de $5.
+            if @game.rev_2_8? && (action.price % 5).nonzero?
+              raise GameError, 'Os lances devem ser múltiplos de $5'
+            end
+
             action.entity.unpass!
 
             if auctioning
@@ -145,8 +150,14 @@ module Engine
 
           private
 
+          # Leilão com desconto: metade do valor, arredondada para cima. Na
+          # rev. 2.8 o arredondamento vai até o próximo múltiplo de $5
+          # ($35 -> $20, $45 -> $25); jogos anteriores mantêm ($35 -> $18).
           def forced_min_bid(company)
-            @forced_round ? (company.min_bid / 2.0).ceil : company.min_bid
+            return company.min_bid unless @forced_round
+            return (company.min_bid / 2.0).ceil unless @game.rev_2_8?
+
+            (company.min_bid / 10.0).ceil * 5
           end
 
           def add_bid(bid)

@@ -15,6 +15,8 @@ require_relative 'step/upgrade_license'
 require_relative 'step/veto_declaration'
 require_relative 'step/fix_par_price'
 require_relative 'step/buy_sell_par_shares'
+require_relative 'step/buy_company'
+require_relative 'step/special_track'
 require_relative '../base'
 require_relative 'step/special_choose'
 
@@ -335,13 +337,19 @@ module Engine
           @or_round_number += 1
           expire_stale_upgrade_licenses!
 
+          # rev. 2.8 (BUG-05): o ParamilitarChoice vem antes do Track, para
+          # que o paramilitar do trilho da (F) seja resolvido logo depois
+          # dele, antes do trilho normal (que pode cair em outro paramilitar).
+          paramilitar_before_track = rev_2_8? ? [G18Junta::Step::ParamilitarChoice] : []
+          paramilitar_after_track = rev_2_8? ? [] : [G18Junta::Step::ParamilitarChoice]
+
           Round::Operating.new(self, [
             G18Junta::Step::CoupPrivateIChoice,
             Engine::Step::Bankrupt,
             Engine::Step::Exchange,
-            Engine::Step::SpecialTrack,
+            G18Junta::Step::SpecialTrack,
             G18Junta::Step::SpecialChoose,
-            Engine::Step::BuyCompany,
+            G18Junta::Step::BuyCompany,
             # G18Junta::Step::VetoDeclaration, -- desativado (18Junta Regras
             # 2.1, 4.9): testado e reportado como excessivamente burocrático
             # e com bugs de fluxo próprios. Avaliado como candidato a
@@ -349,8 +357,9 @@ module Engine
             # vez de removido de vez; o step continua implementado em
             # step/veto_declaration.rb para essa reavaliação futura, mas
             # não participa da rodada de operação até lá.
+            *paramilitar_before_track,
             G18Junta::Step::Track,
-            G18Junta::Step::ParamilitarChoice,
+            *paramilitar_after_track,
             # G18Junta::Step::RemoveParamilitarToken,
             G18Junta::Step::UpgradeLicense,
             G18Junta::Step::Token,
@@ -359,7 +368,7 @@ module Engine
             Engine::Step::DiscardTrain,
             Engine::Step::BuyTrain,
 
-           [Engine::Step::BuyCompany, { blocks: true }],
+           [G18Junta::Step::BuyCompany, { blocks: true }],
           ], round_num: round_num)
         end
 
@@ -520,7 +529,10 @@ module Engine
           # rev. 2.8, 1.5: só um trem-5 comprado da oferta revela carta.
           # from_depot? precisa ser lido antes do super, porque depois da
           # compra o trem já pertence à companhia.
-          from_depot = train.from_depot?
+          # rev. 2.8 (BUG-08/09): from_depot? também é verdadeiro para trens
+          # descartados no banco; só a oferta (upcoming) revela carta e
+          # esgota a pilha.
+          from_depot = rev_2_8? ? @depot.upcoming.include?(train) : train.from_depot?
           depleting = from_depot && @depot.upcoming.count { |t| t.name == train.name } == 1
           super
           refill_corruption_bag!(train.name) if depleting
@@ -892,7 +904,9 @@ module Engine
 
           min_value = corps.map(&net_alignment).min
           candidates = corps.select { |c| net_alignment.call(c) == min_value }
-          target = candidates.max_by { |c| c.share_price.price }
+          # rev. 2.8: no empate de alinhamento e de preço, vale a que opera
+          # primeiro (ordem do mercado); antes, a primeira da lista.
+          target = rev_2_8? ? candidates.min : candidates.max_by { |c| c.share_price.price }
 
           outcome == :democracia ? devalue_company!(target) : punish_ditadura_dissenter!(target)
         end
@@ -1541,6 +1555,25 @@ status << ["Militar x#{alignment[:militar]}", 'militar_support'] if alignment[:m
             msg += " Empatado com #{names}, o desempate foi pela ordem da mesa."
           end
           @log << msg
+        end
+
+        # rev. 2.8, 2.2 (BUG-02): a companhia só compra privada do seu
+        # presidente. A (L) já sai da lista pelo no_buy do motor.
+        def purchasable_companies(entity = nil)
+          companies = super
+          return companies unless rev_2_8? && entity&.corporation?
+
+          companies.select { |company| company.owner == entity.owner }
+        end
+
+        # rev. 2.8, 9.1 (BUG-06): gatilho de fim pelo mercado durante uma
+        # rodada de ações joga um conjunto completo de ORs; durante uma OR,
+        # o jogo termina no fim dessa OR. O momento do gatilho é memorizado,
+        # porque game_end_check é reavaliado a cada ação.
+        def game_end_timing(reason)
+          return super unless reason == :stock_market && rev_2_8?
+
+          @stock_market_end_timing ||= @round.is_a?(Engine::Round::Stock) ? :full_or : :current_or
         end
 
         def new_auction_round
