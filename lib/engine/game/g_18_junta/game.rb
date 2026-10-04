@@ -1566,15 +1566,9 @@ status << ["Militar x#{alignment[:militar]}", 'militar_support'] if alignment[:m
           companies.select { |company| company.owner == entity.owner }
         end
 
-        # rev. 2.8, 9.1 (BUG-06): gatilho de fim pelo mercado durante uma
-        # rodada de ações joga um conjunto completo de ORs; durante uma OR,
-        # o jogo termina no fim dessa OR. O momento do gatilho é memorizado,
-        # porque game_end_check é reavaliado a cada ação.
-        def game_end_timing(reason)
-          return super unless reason == :stock_market && rev_2_8?
-
-          @stock_market_end_timing ||= @round.is_a?(Engine::Round::Stock) ? :full_or : :current_or
-        end
+        # Fim por mercado ($330/$350): durante uma OR, o jogo termina no fim dessa OR;
+        # durante a rodada de mercado, joga-se só a próxima OR (GAME_END_CHECK, stock_market: :current_or).
+        # O fim por banco quebrado joga o conjunto completo de ORs nos dois casos (bank: :full_or).
 
         def new_auction_round
           select_game_entities!
