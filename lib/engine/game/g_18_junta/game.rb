@@ -40,11 +40,29 @@ module Engine
         # Sobrescreve game_corporations (mesmo gancho de game_hexes),
         # gerando uma copia com .merge (NUNCA muta a constante CORPORATIONS
         # compartilhada entre partidas).
-        def game_corporations
-          return self.class::CORPORATIONS unless two_player?
+        # Correção das estações: E passa a ter 3 (grátis, $40, $80) e V passa a ter 2 (grátis, $40);
+        # antes eram E: 2 e V: 3. Vale para todos os jogos, inclusive os em andamento.
+        # Para voltar atrás:
+        #   - todos os jogos: STATIONS_FIX = false
+        #   - só alguns jogos: listar o id (como texto) em STATIONS_FIX_LEGACY_GAME_IDS
+        STATIONS_FIX = true
+        STATIONS_FIX_LEGACY_GAME_IDS = [].freeze
+        STATIONS_FIX_TOKENS = { 'E' => [0, 40, 80], 'V' => [0, 40] }.freeze
 
-          self.class::CORPORATIONS.map do |corp|
-            corp[:sym] == 'C' ? corp.merge(coordinates: 'F4') : corp
+        def stations_fix?
+          self.class::STATIONS_FIX && !self.class::STATIONS_FIX_LEGACY_GAME_IDS.include?(id.to_s)
+        end
+
+        def game_corporations
+          corporations = self.class::CORPORATIONS
+          if two_player?
+            corporations = corporations.map { |corp| corp[:sym] == 'C' ? corp.merge(coordinates: 'F4') : corp }
+          end
+          return corporations unless stations_fix?
+
+          corporations.map do |corp|
+            tokens = self.class::STATIONS_FIX_TOKENS[corp[:sym]]
+            tokens ? corp.merge(tokens: tokens) : corp
           end
         end
 
