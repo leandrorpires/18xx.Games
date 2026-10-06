@@ -19,6 +19,7 @@ require_relative 'step/buy_company'
 require_relative 'step/special_track'
 require_relative '../base'
 require_relative 'step/special_choose'
+require_relative 'stock_market'
 
 module Engine
   module Game
@@ -206,6 +207,15 @@ module Engine
           '3' => { white: 1, black: 3 },
           '4' => { white: 0, black: 4 },
         }.freeze
+        # rev. 2.9 (lote C): 3 fichas pretas (e nenhuma branca) a cada esgotamento.
+        CORRUPTION_REFILL_ON_TRAIN_DEPLETED_REV_2_9 = {
+          '2' => { white: 0, black: 3 },
+          '3' => { white: 0, black: 3 },
+          '4' => { white: 0, black: 3 },
+        }.freeze
+
+        # rev. 2.9 (lote C): privadas em jogo por número de jogadores.
+        PRIVATES_IN_PLAY_REV_2_9 = { 2 => 5, 3 => 6, 4 => 7 }.freeze
 
         # Indenização por corrupção (18Junta Regras 2.1, Apêndice — tabela
         # "Corrupção"): no fim de jogo, o total de fichas (brancas + pretas)
@@ -422,16 +432,45 @@ module Engine
         # 13 privadas, e a redução pra 6 (ou 5) nunca apareceria na tela.
         # Sugestao Claude - remove 1 trem-2, 1 trem-3 e 1 trem-4 das pilhas
         # em partidas de 2 jogadores (18Junta Regras 2.1, item 2).
-        def game_trains
-          return self.class::TRAINS unless two_player?
+        # rev. 2.9 (lote C): 6 trens 8 e 6 trens D (antes 9 de cada).
+        FINAL_TRAINS_NUM_REV_2_9 = 6
 
-          self.class::TRAINS.map do |train|
+        # rev. 2.9 (lote C): na linha mais alta, "subir" vira andar 1 para a
+        # direita (ver stock_market.rb).
+        def init_stock_market
+          G18Junta::StockMarket.new(game_market, self.class::CERT_LIMIT_TYPES,
+                                    multiple_buy_types: self.class::MULTIPLE_BUY_TYPES,
+                                    sold_out_top_row_movement: self.class::SOLD_OUT_TOP_ROW_MOVEMENT,
+                                    top_row_right: rev_2_8?)
+        end
+
+        def game_trains
+          trains = self.class::TRAINS
+          if rev_2_8?
+            trains = trains.map do |train|
+              %w[8 D].include?(train[:name]) ? train.merge(num: self.class::FINAL_TRAINS_NUM_REV_2_9) : train
+            end
+          end
+          return trains unless two_player?
+
+          trains.map do |train|
             if %w[2 3 4].include?(train[:name])
               train.merge(num: train[:num] - 1)
             else
               train
             end
           end
+        end
+
+        # rev. 2.9 (lote C): a (L) passa a valer $180 (receita $40 mantida).
+        # Cópia com .merge, sem mutar a constante COMPANIES.
+        PRIVATE_L_VALUE_REV_2_9 = 180
+
+        def game_companies
+          companies = self.class::COMPANIES
+          return companies unless rev_2_8?
+
+          companies.map { |c| c[:sym] == '(L)' ? c.merge(value: self.class::PRIVATE_L_VALUE_REV_2_9) : c }
         end
 
         def select_game_entities!
@@ -485,7 +524,12 @@ module Engine
                 # dentro desse total; o restante das vagas é sorteado normalmente entre
                 # as demais.
                 available_companies = @companies.reject { |c| c.meta[:present] == :never }
-                privates_in_play = two_player? ? 5 : 6
+                # rev. 2.9 (lote C): 7 privadas com 4 jogadores (antes 6).
+                privates_in_play = if rev_2_8?
+                                     self.class::PRIVATES_IN_PLAY_REV_2_9[players.size]
+                                   else
+                                     two_player? ? 5 : 6
+                                   end
                 forced = available_companies.select { |c| c.meta[:present] }
                 remaining_pool = (available_companies - forced).sort_by { rand }
                 selected = forced + remaining_pool.take(privates_in_play - forced.size)
@@ -558,7 +602,12 @@ module Engine
         end
 
         def refill_corruption_bag!(train_name)
-          refill = self.class::CORRUPTION_REFILL_ON_TRAIN_DEPLETED[train_name]
+          table = if rev_2_8?
+                    self.class::CORRUPTION_REFILL_ON_TRAIN_DEPLETED_REV_2_9
+                  else
+                    self.class::CORRUPTION_REFILL_ON_TRAIN_DEPLETED
+                  end
+          refill = table[train_name]
           return unless refill
 
           refill.each { |color, count| count.times { @corruption_bag << color } }
@@ -941,8 +990,12 @@ module Engine
         def devalue_company!(corporation)
           return unless corporation.share_price
 
-          target_price = (corporation.share_price.price / 2.0).ceil
-          new_price = find_share_price_at_or_below(target_price)
+          new_price =
+            if rev_2_8?
+              find_share_price_at_or_above_half(corporation.share_price.price)
+            else
+              find_share_price_at_or_below((corporation.share_price.price / 2.0).ceil)
+            end
           return unless new_price
 
           @log << '------------------------------------------------------------'
@@ -962,6 +1015,17 @@ module Engine
           @log << 'EFEITOS DIRETOS:'
           @log << 'Último tipo trem disponível: D (trens 8 removidos do jogo).'
           @log << 'Custo por corrupção mais alto no fim do jogo.'
+        end
+
+        # rev. 2.9 (lote C): o menor valor do mercado que seja maior ou igual
+        # à metade do preço atual; entre espaços com esse valor, o mais à
+        # direita e, se ainda empatar, o mais alto.
+        def find_share_price_at_or_above_half(current_price)
+          candidates = stock_market.market.flatten.compact.select { |sp| sp.price * 2 >= current_price }
+          return nil if candidates.empty?
+
+          min_price = candidates.map(&:price).min
+          candidates.select { |sp| sp.price == min_price }.min_by { |sp| [-sp.coordinates[1], sp.coordinates[0]] }
         end
 
         def find_share_price_at_or_below(target_price)
