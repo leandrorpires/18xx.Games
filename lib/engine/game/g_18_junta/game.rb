@@ -435,6 +435,25 @@ module Engine
         # rev. 2.9 (lote C): 6 trens 8 e 6 trens D (antes 9 de cada).
         FINAL_TRAINS_NUM_REV_2_9 = 6
 
+        # rev. 2.9 (lote C), só visual: as casas da linha mais alta (de $75 a
+        # $320; o $350 fica como está) mostram o símbolo ↱ no rodapé da casa
+        # (campo info, desenhado pela tela do mercado), para lembrar que ali
+        # "subir" anda 1 casa para a direita. As casas não ganham tipo: sem
+        # cor, sem destaque e sem efeito em nenhuma regra.
+        TOP_ROW_RIGHT_SYMBOL = "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0↱"
+
+        def game_market
+          market = self.class::MARKET
+          return market unless rev_2_8?
+
+          top_row = market.first.each_with_index.map do |code, col|
+            next code if col == market.first.size - 1 || code.match?(/[a-zA-Z]/)
+
+            { price: code.to_i, info: self.class::TOP_ROW_RIGHT_SYMBOL }
+          end
+          [top_row, *market.drop(1)]
+        end
+
         # rev. 2.9 (lote C): na linha mais alta, "subir" vira andar 1 para a
         # direita (ver stock_market.rb).
         def init_stock_market
