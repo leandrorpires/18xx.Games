@@ -24,7 +24,7 @@ module Engine
 
           def draw_corruption_token_for_upgrade!(entity)
             president = entity.owner
-            colors = @game.draw_corruption_tokens!(president, max_draws: 1)
+            colors = @game.draw_corruption_tokens!(president, max_draws: 1, corporation: entity)
             return if colors.empty?
 
             color_name = colors.first == :white ? 'branca' : 'preta'

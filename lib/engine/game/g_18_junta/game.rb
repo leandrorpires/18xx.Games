@@ -409,6 +409,7 @@ module Engine
           @vetoed_hex = {}
           @pending_coup_i_choice = nil
           @private_d_used = false
+          @private_k_swap_or = nil # rev. 2.9 (3.10): OR em que a troca da (K) já foi usada
           
 
           setup_corruption_bag!
@@ -485,11 +486,24 @@ module Engine
         # Cópia com .merge, sem mutar a constante COMPANIES.
         PRIVATE_L_VALUE_REV_2_9 = 180
 
+        # rev. 2.9 (lote C, 3.10): a (K) volta a ser sorteada (13 privadas),
+        # com a regra nova da troca (ver swap_black_via_private_k_rev_2_9).
+        # Os ids antigos continuam com :never.
+        PRIVATE_K_DESC_REV_2_9 = 'Uma vez por rodada de operações, quando o presidente da companhia proprietária '\
+                                 'sortear uma ficha preta do saco por ação dessa companhia, a ficha volta ao saco e '\
+                                 'outra é sorteada e mantida, seja qual for a cor.'
+
         def game_companies
           companies = self.class::COMPANIES
           return companies unless rev_2_8?
 
-          companies.map { |c| c[:sym] == '(L)' ? c.merge(value: self.class::PRIVATE_L_VALUE_REV_2_9) : c }
+          companies.map do |c|
+            case c[:sym]
+            when '(L)' then c.merge(value: self.class::PRIVATE_L_VALUE_REV_2_9)
+            when '(K)' then c.merge(desc: self.class::PRIVATE_K_DESC_REV_2_9, meta: { present: false })
+            else c
+            end
+          end
         end
 
         def select_game_entities!
@@ -657,10 +671,17 @@ module Engine
         # resumo mostrar a cor que o jogador realmente recebeu -- antes, o
         # resumo mostrava a cor sorteada ORIGINALMENTE, mesmo quando a (K)
         # trocava ela por outra, dando um log inconsistente com a mecânica.
-        def give_corruption_token!(holder, color)
+        # rev. 2.9 (lote C, 3.10): corporation é a companhia que causou o
+        # sorteio, só quando a ficha saiu do saco (upgrade sem licença e
+        # apoio a paramilitar); fichas do estoque chegam sem ela.
+        def give_corruption_token!(holder, color, corporation: nil)
           return color unless holder
 
-          color = swap_black_via_private_k(holder, color) if color == :black
+          if rev_2_8?
+            color = swap_black_via_private_k_rev_2_9(holder, corporation) if color == :black && corporation
+          elsif color == :black
+            color = swap_black_via_private_k(holder, color)
+          end
 
           @corruption_tokens[holder][color] += 1
           color
@@ -700,6 +721,25 @@ module Engine
           return color unless new_color
 
           @log << "#{holder.name} troca a ficha preta de corrupção (privada (K) Hernandez Abogados)"
+          new_color
+        end
+
+        # rev. 2.9 (lote C, 3.10): uma vez por OR, a ficha preta que o
+        # presidente atual da companhia dona da (K) sorteia do saco por ação
+        # dessa companhia volta ao saco, o saco é embaralhado (gerador do
+        # jogo) e sai outra, mantida seja qual for a cor.
+        def swap_black_via_private_k_rev_2_9(holder, corporation)
+          return :black unless corporation.owner == holder
+          return :black unless owns_private?(corporation, '(K)')
+          return :black if @private_k_swap_or == @or_round_number
+
+          @private_k_swap_or = @or_round_number
+          @corruption_bag << :black
+          @corruption_bag.sort_by! { rand }
+          new_color = @corruption_bag.pop
+          color_name = new_color == :white ? 'branca' : 'preta'
+          @log << "#{holder.name} devolve a ficha preta ao saco e sorteia outra: #{color_name} "\
+                  '(privada (K) Hernandez Abogados)'
           new_color
         end
 
@@ -1226,7 +1266,7 @@ module Engine
             move_political_track!(side)
             side_name = side == :civil ? 'civis' : 'paramilitares'
             @log << "#{corporation.name} apoia os #{side_name} em #{hex.name}"
-            colors = draw_corruption_tokens!(corporation.owner, max_draws: 2)
+            colors = draw_corruption_tokens!(corporation.owner, max_draws: 2, corporation: corporation)
             drawn_side_name = side == :civil ? 'civis' : 'militares'
             @log << "#{corporation.owner.name} pega ficha(s) de corrupção por apoiar #{drawn_side_name} "\
                     ": #{corruption_tokens_summary_text(colors)}" unless colors.empty?
@@ -1245,14 +1285,17 @@ module Engine
         # 1 reproduz a regra do upgrade sem licença (sorteia só uma,
         # sempre, seja qual for a cor). Devolve o array de cores sorteadas,
         # para quem chamou montar o log.
-        def draw_corruption_tokens!(president, max_draws:)
+        # corporation (rev. 2.9, 3.10): a companhia que causou o sorteio, para a
+        # troca da (K); só é repassada quando a ficha saiu do saco.
+        def draw_corruption_tokens!(president, max_draws:, corporation: nil)
           colors = []
 
           max_draws.times do
+            from_bag = !@corruption_bag.empty?
             color = draw_corruption_token!
             break unless color
 
-            final_color = give_corruption_token!(president, color)
+            final_color = give_corruption_token!(president, color, corporation: from_bag ? corporation : nil)
             colors << final_color
             break if final_color == :black
           end
