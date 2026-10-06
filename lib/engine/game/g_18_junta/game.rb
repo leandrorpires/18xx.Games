@@ -1613,6 +1613,17 @@ status << ["Militar x#{alignment[:militar]}", 'militar_support'] if alignment[:m
           @upgrade_licenses.reject! { |_corporation, valid_on_round| valid_on_round < @or_round_number }
         end
 
+        # Falência (18Junta Regras 9.1.1, como no 1830; BUG-11): o caixa do
+        # falido já voltou ao banco no passo Bankrupt; ele pontua só as ações
+        # que não conseguiu vender (a preço de mercado) mais o caixa que
+        # resultar da indenização por corrupção (9.2, pode ser negativo).
+        # Privadas não contam.
+        def player_value(player)
+          return super unless player.bankrupt
+
+          super - player.companies.sum(&:value)
+        end
+
         # Desempate final (18Junta Regras 9.3): maior patrimônio; depois menos
         # fichas pretas; depois menos fichas brancas.
         def result

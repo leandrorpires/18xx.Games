@@ -43,6 +43,13 @@ module Engine
           end
 
           def process_lay_tile(action)
+            # Tile fora da fase (18Junta Regras 2.1, 3.8): recusa a cor que
+            # não está em phase.tiles, a mesma lista que a tela oferece.
+            color = action.tile.color
+            unless @game.phase.tiles.include?(color)
+              raise GameError, "#{color.to_s.capitalize} tiles are not available in phase #{@game.phase.name}"
+            end
+
             super
 
             consume_license_if_upgraded(action)
