@@ -152,13 +152,13 @@ module Engine
           'faz6' => {
             'count' => 2,
             'color' => 'brown',
-            'code' => 'town=revenue:30,style:hidden,visit_cost:0;path=a:0,b:_0;path=a:3,b:_0;path=a:4,b:_0;path=a:1,b:_0;'\
+            'code' => 'town=revenue:brown_30|diesel_60,style:hidden,visit_cost:0;path=a:0,b:_0;path=a:3,b:_0;path=a:4,b:_0;path=a:1,b:_0;'\
                       'label= ;icon=image:18_junta/fazenda4,large:2;icon=image:18_junta/plus_30_;upgrade=cost:25,terrain:farm',
           },
           'faz7' => {
             'count' => 2,
             'color' => 'brown',
-            'code' => 'town=revenue:brown_30,style:hidden|diesel_60,style:hidden,visit_cost:0;path=a:0,b:_0;path=a:3,b:_0;path=a:4,b:_0;path=a:5,b:_0;'\
+            'code' => 'town=revenue:brown_30|diesel_60,style:hidden,visit_cost:0;path=a:0,b:_0;path=a:3,b:_0;path=a:4,b:_0;path=a:5,b:_0;'\
                       'label= ;icon=image:18_junta/fazenda4,large:2;icon=image:18_junta/plus_30_;upgrade=cost:25,terrain:farm',
           },
 
@@ -173,7 +173,7 @@ module Engine
           'faz8' => {
             'count' => 1,
             'color' => 'gray',
-            'code' => 'town=revenue:40,style:hidden,visit_cost:0,terrain:farm;path=a:0,b:_0;path=a:3,b:_0;path=a:4,b:_0;path=a:5,b:_0;path=a:2,b:_0;'\
+            'code' => 'town=revenue:gray_40|diesel_80,style:hidden,visit_cost:0,terrain:farm;path=a:0,b:_0;path=a:3,b:_0;path=a:4,b:_0;path=a:5,b:_0;path=a:2,b:_0;'\
                       'label= ;icon=image:18_junta/fazenda4,large:2;icon=image:18_junta/plus_30_',
           },
 
