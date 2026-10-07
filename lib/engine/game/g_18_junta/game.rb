@@ -1675,6 +1675,18 @@ status << ["Militar x#{alignment[:militar]}", 'militar_support'] if alignment[:m
           super - player.companies.sum(&:value)
         end
 
+        # Laguna (E11): o tile amarelo lag1 pode receber upgrade direto para o
+        # cinza lag2, sem passar por verde e marrom (designer, 07/10/2026). A
+        # fase continua mandando: o cinza só aparece quando phase.tiles o
+        # inclui (fase D). Custo: o upgrade=cost:80 do próprio lag1.
+        # Nenhuma ação gravada pode ter usado o lag2 (era recusado), logo
+        # não precisa de trava rev_2_8?.
+        def upgrades_to_correct_color?(from, to, selected_company: nil)
+          return true if from.name == 'lag1' && to.name == 'lag2'
+
+          super
+        end
+
         # Desempate final (18Junta Regras 9.3): maior patrimônio; depois menos
         # fichas pretas; depois menos fichas brancas.
         def result
