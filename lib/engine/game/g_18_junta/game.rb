@@ -1352,6 +1352,7 @@ module Engine
 
         display_political_track_label = political_track_label.gsub(/\A\s*-+\s*|\s*-+\s*\z/, '')
         hex_by_id('A2').tile.location_name = "STATUS: \n#{display_political_track_label}"
+        hex_by_id('A2').tile.color = political_track_tile_color
 
         
 
@@ -1363,6 +1364,22 @@ module Engine
 
         def political_track_label
           political_track_label_for(@political_track)
+        end
+
+        # Cor do tile de status em A2, função só da posição atual: neutro = laranja,
+        # MIL (negativo) = verde, CIV (positivo) = azul.
+        def political_track_tile_color
+          return :orange if @political_track.zero?
+
+          @political_track.negative? ? :green : :blue
+        end
+
+        # O tile de A2 só mostra o status político: nunca é melhorado (a cor
+        # verde/azul faria o motor aceitar tiles marrons/sépia sem caminhos).
+        def upgrades_to?(from, to, special = false, selected_company: nil)
+          return false if from.hex&.id == 'A2'
+
+          super
         end
 
 
