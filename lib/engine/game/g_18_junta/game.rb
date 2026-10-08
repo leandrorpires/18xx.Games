@@ -532,6 +532,9 @@ module Engine
           return if @game_entities_selected
 
           @game_entities_selected = true
+          # Linhas do bloco SETUP do log: acumuladas aqui e inseridas no @log,
+          # antes da linha da Fase, por flush_setup_log! (so texto, sem rand).
+          @setup_log = []
 
           # Sugestao Claude - Companhia H nunca entra em partidas de 2
           # jogadores (18Junta Regras 2.1, item 3), removida antes do
@@ -540,7 +543,7 @@ module Engine
             h_corp = @corporations.find { |c| c.name == 'H' }
             if h_corp
               @corporations.delete(h_corp)
-              @log << 'Corporation not used in this game (2 players): H'
+              @setup_log << '2-Player Game (smaller Map): Corporation H not available'
             end
           end
 
@@ -552,7 +555,7 @@ module Engine
           # invalidando ações já registradas contra as entidades originais).
           removed_corporation = @corporations.min_by { rand }
           @corporations.delete(removed_corporation)
-          @log << "Corporation not used in this game: #{removed_corporation.name}"
+          @setup_log << "Corporation removed in this game: #{removed_corporation.name}"
 
 
                 # Sugestão do Claude para colocar parâmetro que alguma private obrigatoriamente esteja em jogo (Precisa marcar meta: { present: true } no Entities).
@@ -576,7 +579,7 @@ module Engine
                 remaining_pool = (available_companies - forced).sort_by { rand }
                 selected = forced + remaining_pool.take(privates_in_play - forced.size)
                 (@companies - selected).each { |c| remove_company(c) }
-                @log << "Private companies in this game: #{selected.map(&:name).join(', ')}"
+                @setup_log << "Private companies available in this game: #{selected.map(&:name).join(', ')}"
                end
 
 
@@ -1210,8 +1213,22 @@ module Engine
           militar_corps, civil_corps = @corporations.sort_by { rand }.first(4).each_slice(2).to_a
           militar_corps.each { |c| @corporation_alignment[c][:militar] += 1 }
           civil_corps.each { |c| @corporation_alignment[c][:civil] += 1 }
-          @log << "Starting Military token: #{militar_corps.map(&:name).join(', ')}; "\
-                  "starting Civilian token: #{civil_corps.map(&:name).join(', ')}"
+          tokens = militar_corps.map { |c| "#{c.name} (Military)" } + civil_corps.map { |c| "#{c.name} (Civilian)" }
+          (@setup_log ||= []) << "Starting alignment tokens - #{tokens.join(', ')}."
+          flush_setup_log!
+        end
+
+        SETUP_LOG_RULE = '------------------ SETUP --------------------------'
+        SETUP_LOG_END = '------------------------------------------------------'
+
+        # A linha da Fase e emitida em init_phase, antes dos sorteios do setup
+        # (que nao podem mudar de ordem). Entao o bloco SETUP e inserido no @log
+        # imediatamente antes dela. @log e reconstruido do zero a cada replay/undo.
+        def flush_setup_log!
+          lines = [SETUP_LOG_RULE, *@setup_log, SETUP_LOG_END].map { |m| Engine::GameLog::Entry.new(m, nil) }
+          @setup_log = []
+          idx = @log.index { |e| e.message.to_s.start_with?('-- Phase ') } || @log.size
+          @log.insert(idx, *lines)
         end
 
         # A ficha inicial de apoio civil/militar de uma companhia (18Junta
