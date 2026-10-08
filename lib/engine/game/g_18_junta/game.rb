@@ -1439,7 +1439,7 @@ status << ["Military x#{alignment[:militar]}", 'militar_support'] if alignment[:
 
           rows = [['']]
           rows << ['']
-          rows << ['𝐏𝐎𝐋𝐈𝐓𝐈𝐂𝐀𝐋 𝐓𝐑𝐀𝐂𝐊:']
+          rows << %w[𝐏𝐎𝐋𝐈𝐓𝐈𝐂𝐀𝐋\ 𝐓𝐑𝐀𝐂𝐊:]
           rows << ['']
           threshold = self.class::RADICAL_THRESHOLD
           double_row = positions.map do |p|
@@ -1452,7 +1452,7 @@ status << ["Military x#{alignment[:militar]}", 'militar_support'] if alignment[:
           rows << label_row
           rows << marker_row
           rows << ['']
-          rows << ['𝐂𝐎𝐑𝐑𝐔𝐏𝐓𝐈𝐎𝐍:']
+          rows << %w[𝐂𝐎𝐑𝐑𝐔𝐏𝐓𝐈𝐎𝐍:]
           rows << ['']
           rows << ['BAG:', "#{bag[:white]}x⚪", "#{bag[:black]}x⚫"]
           rows << ['']
