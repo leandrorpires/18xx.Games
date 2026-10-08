@@ -1218,8 +1218,8 @@ module Engine
           flush_setup_log!
         end
 
-        SETUP_LOG_RULE = "#{'-' * 26} SETUP #{'-' * 27}"
-        SETUP_LOG_END = '-' * 60
+        SETUP_LOG_RULE = "#{'-' * 31} SETUP #{'-' * 32}"
+        SETUP_LOG_END = '-' * 70
 
         # A linha da Fase e emitida em init_phase, antes dos sorteios do setup
         # (que nao podem mudar de ordem). Aqui ela e retirada do @log e
@@ -1228,7 +1228,10 @@ module Engine
         # indice: a tela do log agrupa por action_id e no Opal o insert nao
         # manteve a ordem.
         def flush_setup_log!
-          lines = @setup_log
+          # As privadas sao sorteadas antes das fichas, mas o bloco mostra as
+          # fichas primeiro (so a ordem do texto; os sorteios nao mudam).
+          privates, others = @setup_log.partition { |line| line.start_with?('Private companies') }
+          lines = others + privates
           @setup_log = []
           idx = @log.index { |e| e.message.to_s.start_with?('-- Phase ') }
           phase_text = idx ? @log.delete_at(idx).message : nil
