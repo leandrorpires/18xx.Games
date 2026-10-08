@@ -42,7 +42,7 @@ module Engine
             sym: '(C)',
             value: 45,
             revenue: 10,
-            desc: 'When the owning company lays the first tile in a hex with a paramilitary token, it may ' \
+            desc: 'When the owning company lays a tile in a hex with a paramilitary token, it may ' \
                   'discard that token without choosing a side. If it does, the Political Track marker ' \
                   'does not move and no corruption token is drawn.',
             color: nil,
@@ -146,7 +146,7 @@ module Engine
             sym: '(I)',
             value: 75,
             revenue: 20,
-            desc: 'During coup resolution, before the tokens cancel, the owning company may discard one of ' \
+            desc: 'During coup resolution, before the tokens are counted, the owning company may discard one of ' \
                   'its alignment tokens.',
             color: nil,
             meta: { present: false },
