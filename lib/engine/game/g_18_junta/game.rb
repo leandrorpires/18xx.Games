@@ -1439,7 +1439,7 @@ status << ["Military x#{alignment[:militar]}", 'militar_support'] if alignment[:
 
           rows = [['']]
           rows << ['']
-          rows << %w[𝐏𝐎𝐋𝐈𝐓𝐈𝐂𝐀𝐋\ 𝐓𝐑𝐀𝐂𝐊:]
+          rows << %w[𝐏𝐎𝐋𝐈𝐓𝐈𝐂𝐒:]
           rows << ['']
           threshold = self.class::RADICAL_THRESHOLD
           double_row = positions.map do |p|
