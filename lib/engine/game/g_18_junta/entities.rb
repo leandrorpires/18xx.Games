@@ -188,6 +188,17 @@ module Engine
             abilities: [{ type: 'no_buy' }],
           },
           {
+            name: '(M) Sociedade Caja Negra',
+            sym: '(M)',
+            value: 40,
+            revenue: 5,
+            desc: 'Once per Stock Round, on its owner\'s turn, the owner may draw 1 corruption token from the bag ' \
+                  'and receive $5 times the current phase number from the bank. This does not use up the ' \
+                  'owner\'s turn.',
+            color: nil,
+            meta: { present: false },
+          },
+          {
             name: '(N) Emisarios de las Sombras',
             sym: '(N)',
             value: 60,

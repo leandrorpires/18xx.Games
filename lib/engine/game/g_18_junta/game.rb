@@ -19,6 +19,7 @@ require_relative 'step/buy_company'
 require_relative 'step/special_track'
 require_relative '../base'
 require_relative 'step/special_choose'
+require_relative 'step/private_m_draw'
 require_relative 'stock_market'
 
 module Engine
@@ -350,7 +351,12 @@ module Engine
 
         # Sugestão do Claude implementada por Leandro em 19-09-26 (para funcionamento private A)
         def stock_round
+          private_m_step = rev_2_8? ? [G18Junta::Step::PrivateMDraw] : []
+
+          # (M) comes first: it is a free action, so it must stay available even while a
+          # blocking step (e.g. the Private (A) question) is waiting for the owner.
           Round::Stock.new(self, [
+            *private_m_step,
             G18Junta::Step::FixParPrice,
             Engine::Step::DiscardTrain,
             Engine::Step::Exchange,
@@ -410,6 +416,7 @@ module Engine
           @pending_coup_i_choice = nil
           @private_d_used = false
           @private_k_swap_or = nil # rev. 2.9 (3.10): OR em que a troca da (K) já foi usada
+          @private_m_used_turn = nil # (M): Stock Round (@turn) em que a habilidade já foi usada
           
 
           setup_corruption_bag!
@@ -495,7 +502,9 @@ module Engine
 
         def game_companies
           companies = self.class::COMPANIES
-          return companies unless rev_2_8?
+          # (M) Sociedade Caja Negra only exists in new games (same lock as rev_2_8?),
+          # so the private draw and the rand sequence of older games stay unchanged.
+          return companies.reject { |c| c[:sym] == '(M)' } unless rev_2_8?
 
           companies.map do |c|
             case c[:sym]
@@ -1522,6 +1531,38 @@ status << ["Military x#{alignment[:militar]}", 'militar_support'] if alignment[:
 
             owner = @companies.find { |c| c.sym == '(E)' }&.owner
             owner&.player? && corporation.owner == owner
+          end
+
+          # Private (M) Sociedade Caja Negra: free action, once per Stock Round, on the
+          # owner's turn. Draws 1 token from the (already shuffled) corruption bag and
+          # pays $5 x phase number. Not available in phase D, with an empty bag, or when
+          # the private is owned by a company or closed.
+          def private_m_payment
+            5 * @phase.name.to_i
+          end
+
+          def private_m_usable?(player)
+            return false unless rev_2_8?
+            return false unless player&.player?
+            return false unless @round.is_a?(Engine::Round::Stock)
+            return false if @private_m_used_turn == @turn
+            return false if @phase.name == 'D'
+            return false if @corruption_bag.empty?
+
+            company = @companies.find { |c| c.sym == '(M)' }
+            !company.nil? && !company.closed? && company.owner == player
+          end
+
+          def use_private_m!(player)
+            raise GameError, 'Private (M) cannot be used now' unless private_m_usable?(player)
+
+            @private_m_used_turn = @turn
+            amount = private_m_payment
+            color = draw_corruption_token!
+            give_corruption_token!(player, color)
+            @bank.spend(amount, player)
+            @log << "#{player.name} uses Private (M) Sociedade Caja Negra: draws a #{color == :white ? 'white' : 'black'} "\
+                    "corruption token and receives #{format_currency(amount)} from the bank"
           end
 
           def donate_private_e!(corporation)
