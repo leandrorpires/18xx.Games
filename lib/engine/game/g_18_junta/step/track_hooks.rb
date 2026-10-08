@@ -16,7 +16,7 @@ module Engine
             return unless upgraded
 
             if @game.consume_upgrade_license!(corporation)
-              @log << "#{corporation.name} usa a licença de aprimoramento (não sorteia ficha de corrupção)"
+              @log << "#{corporation.name} uses the Upgrade License (does not draw a corruption token)"
             else
               draw_corruption_token_for_upgrade!(corporation)
             end
@@ -27,9 +27,9 @@ module Engine
             colors = @game.draw_corruption_tokens!(president, max_draws: 1, corporation: entity)
             return if colors.empty?
 
-            color_name = colors.first == :white ? 'branca' : 'preta'
-            @log << "#{president.name} recebe ficha aleatória de corrupção por fazer upgrade sem licença: "\
-                    "Sorteada ficha #{color_name}"
+            color_name = colors.first == :white ? 'white' : 'black'
+            @log << "#{president.name} receives a random corruption token for upgrading without a license: "\
+                    "Drew a #{color_name} token"
           end
 
           def flag_paramilitar_hex_if_needed(action, corporation = action.entity)

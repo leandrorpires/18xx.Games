@@ -29,7 +29,7 @@ module Engine
             return super unless private_f_restricted?(entity)
 
             unless action.hex.tile.color == :white && action.tile.color == :yellow
-              raise GameError, "#{entity.name} só pode colocar trilho amarelo em hexágono vazio"
+              raise GameError, "#{entity.name} can only lay a yellow tile on an empty hex"
             end
 
             super

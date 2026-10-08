@@ -16,9 +16,9 @@ module Engine
             if @game.rev_2_8?
               entity = action.entity
               company = action.company
-              raise GameError, "#{company.name} não pode ser vendida para uma companhia" if @game.abilities(company, :no_buy)
+              raise GameError, "#{company.name} cannot be sold to a company" if @game.abilities(company, :no_buy)
               if entity.corporation? && company.owner != entity.owner
-                raise GameError, "#{entity.name} só pode comprar privadas do seu presidente (#{entity.owner&.name})"
+                raise GameError, "#{entity.name} can only buy Private Companies from its president (#{entity.owner&.name})"
               end
             end
 

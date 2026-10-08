@@ -24,7 +24,7 @@ module Engine
           # assim que este passo virasse o bloqueador (Tentativa de Golpe
           # resolvida com a privada (I) em jogo).
           def description
-            'Privada (I): Descartar Ficha'
+            'Private (I): Discard Token'
           end
 
           def actions(entity)
@@ -44,7 +44,7 @@ module Engine
           end
 
           def choice_name
-            'Privada (I) Orejuela Abogados: descartar 1 ficha de apoio/rejeição ao golpe?'
+            'Private (I) Orejuela Abogados: discard 1 alignment token?'
           end
 
           def choices
@@ -52,9 +52,9 @@ module Engine
             return {} unless corp
 
             alignment = @game.corporation_alignment(corp)
-            choice_hash = { SKIP_CHOICE => 'Não descartar' }
-            choice_hash['civil'] = "Descartar 1 ficha civil (tem #{alignment[:civil]})" if alignment[:civil].positive?
-            choice_hash['militar'] = "Descartar 1 ficha militar (tem #{alignment[:militar]})" if alignment[:militar].positive?
+            choice_hash = { SKIP_CHOICE => 'Do not discard' }
+            choice_hash['civil'] = "Discard 1 Civilian token (has #{alignment[:civil]})" if alignment[:civil].positive?
+            choice_hash['militar'] = "Discard 1 Military token (has #{alignment[:militar]})" if alignment[:militar].positive?
             choice_hash
           end
 

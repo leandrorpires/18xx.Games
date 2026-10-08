@@ -23,7 +23,7 @@ module Engine
           # num hexágono de paramilitar -- por fora parecia que "o jogo
           # trava ao colocar um tile em locais militares".
           def description
-            'Ficha de Paramilitar'
+            'Paramilitary Token'
           end
 
           def actions(entity)
@@ -39,16 +39,16 @@ module Engine
 
           def choice_name
             hex = @game.pending_paramilitar_hex
-            "Foi identificado um grupo paramilitar em #{hex&.name}: Qual lado a companhia vai apoiar nesse momento?"
+            "A paramilitary group was identified at #{hex&.name}: which side will the company support now?"
           end
 
            def choices
             choice_hash = {
-              'civil' => 'Apoiar os civis',
-              'militar' => 'Apoiar os militares',
+              'civil' => 'Support the Civilian side',
+              'militar' => 'Support the Military side',
             }
             if @game.discard_paramilitar_free?(current_entity)
-              choice_hash['descartar'] = 'Descartar a ficha [Private (C)]'
+              choice_hash['descartar'] = 'Discard the token [Private (C)]'
             end
             choice_hash
           end
