@@ -489,9 +489,9 @@ module Engine
         # rev. 2.9 (lote C, 3.10): a (K) volta a ser sorteada (13 privadas),
         # com a regra nova da troca (ver swap_black_via_private_k_rev_2_9).
         # Os ids antigos continuam com :never.
-        PRIVATE_K_DESC_REV_2_9 = 'Once per Operating Round, when the owning company causes its president to draw a black '\
-                                 'corruption token from the bag, the president may return it to the bag and draw '\
-                                 'another, which is kept regardless of its color. (Automatic in the digital game.)'
+        PRIVATE_K_DESC_REV_2_9 = "Once per Operating Round, when the owning company's president draws a black corruption "\
+                                 'token from the bag, it is automatically returned to the bag and a new token is '\
+                                 'drawn, which is kept regardless of its color.'
 
         def game_companies
           companies = self.class::COMPANIES

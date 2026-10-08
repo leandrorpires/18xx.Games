@@ -105,7 +105,7 @@ module Engine
             value: 60,
             revenue: 10,
             desc: 'Once per Operating Round, the owning company may make an additional yellow tile lay for ' \
-                  '$25 plus terrain costs.',
+                  '$25 plus terrain costs. Normal tile placement rules apply to it.',
             color: nil,
             meta: { present: false },
               #Sugestão do Claude implementada por Leandro 20-09-26
