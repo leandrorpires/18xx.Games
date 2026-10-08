@@ -76,7 +76,8 @@ module Engine
               revenue: 10,
               desc: 'From the purchase of the first 3-train, the owner may donate this Private Company to a ' \
                   'company they preside over, instead of selling it. The bank gives that company $150, and ' \
-                  'the Private Company keeps paying its revenue to that company.',
+                  'the Private Company keeps paying its revenue to that company. The owner receives no ' \
+                  'compensation.',
               color: nil,
               meta: { present: false },
               abilities: [
@@ -103,8 +104,8 @@ module Engine
             sym: '(F)',
             value: 60,
             revenue: 10,
-            desc: 'In the Track step, the owning company may lay one additional yellow tile for $25 plus ' \
-                  'terrain costs.',
+            desc: 'Once per Operating Round, the owning company may make an additional yellow tile lay for ' \
+                  '$25 plus terrain costs.',
             color: nil,
             meta: { present: false },
               #Sugestão do Claude implementada por Leandro 20-09-26
@@ -145,7 +146,8 @@ module Engine
             sym: '(I)',
             value: 75,
             revenue: 20,
-            desc: 'During coup resolution, the owning company may discard one of its alignment tokens.',
+            desc: 'During coup resolution, before the tokens cancel, the owning company may discard one of ' \
+                  'its alignment tokens.',
             color: nil,
             meta: { present: false },
           },
