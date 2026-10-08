@@ -654,8 +654,14 @@ module Engine
 
           refill.each { |color, count| count.times { @corruption_bag << color } }
           @corruption_bag.sort_by! { rand }
-          @log << "#{train_name}-train exhausted: #{refill[:white]} white token(s) and #{refill[:black]} "\
-                  'black token(s) go into the corruption bag'
+          white = refill[:white]
+          black = refill[:black]
+          @log << if white.positive?
+                    "#{train_name}-train exhausted: #{white} white token(s) and #{black} black token(s) "\
+                      'are added to the corruption bag'
+                  else
+                    "#{train_name}-train exhausted: #{black} black token(s) are added to the corruption bag"
+                  end
         end
 
         def draw_corruption_token!
