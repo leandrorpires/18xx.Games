@@ -55,7 +55,7 @@ module Engine
           'I3' => 'San Miguel',
           'L12' => 'Puerto Viejo',
           'E11' => 'Laguna',
-          'A2' => 'NEUTRO',
+          'A2' => 'Neutral',
         }.freeze
 
         PARAMILITAR_HEXES_2P = %w[B14 C11 E7 G3 G13 I9 J4 K11 L8].freeze

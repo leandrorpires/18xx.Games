@@ -206,7 +206,7 @@ module Engine
           'K3' => 'San Miguel',
           'L12' => 'Puerto Viejo',
           'E11' => 'Laguna',
-          'A2' => 'NEUTRO',
+          'A2' => 'Neutral',
 
         }.freeze
 
