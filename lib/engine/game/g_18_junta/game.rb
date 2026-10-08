@@ -1259,7 +1259,7 @@ module Engine
 
           case choice
           when 'descartar'
-            @log << "#{corporation.name} discards the paramilitary token at #{hex.name} [Private (C)]"
+            @log << "#{corporation.name} discards the paramilitary token at #{hex.name} without choosing a side [Private (C)]"
           when 'civil', 'militar'
             side = choice.to_sym
             @corporation_alignment[corporation][side] += 1
@@ -1356,7 +1356,7 @@ module Engine
 def political_track_label_for(position)
   return 'Neutral' if position.zero?
 
-  position.positive? ? "--- CIVILIAN #{position}" : "MILITARY #{position.abs} ---"
+  position.positive? ? "--- CIV #{position}" : "MIL #{position.abs} ---"
 end
 
 

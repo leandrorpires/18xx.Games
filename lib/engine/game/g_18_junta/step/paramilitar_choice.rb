@@ -48,7 +48,7 @@ module Engine
               'militar' => 'Support the Military side',
             }
             if @game.discard_paramilitar_free?(current_entity)
-              choice_hash['descartar'] = 'Discard the token [Private (C)]'
+              choice_hash['descartar'] = 'Discard the token without choosing a side [Private (C)]'
             end
             choice_hash
           end

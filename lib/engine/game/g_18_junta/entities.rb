@@ -43,8 +43,8 @@ module Engine
             value: 45,
             revenue: 10,
             desc: 'When the owning company lays the first tile in a hex with a paramilitary token, it may ' \
-                  'discard that token without choosing a side, moving the political marker, or drawing ' \
-                  'corruption tokens.',
+                  'discard that token without choosing a side. If it does, the Political Track marker ' \
+                  'does not move and no corruption token is drawn.',
             color: nil,
             meta: { present: false },
           },
