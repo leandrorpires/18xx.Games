@@ -1214,21 +1214,25 @@ module Engine
           militar_corps.each { |c| @corporation_alignment[c][:militar] += 1 }
           civil_corps.each { |c| @corporation_alignment[c][:civil] += 1 }
           tokens = militar_corps.map { |c| "#{c.name} (Military)" } + civil_corps.map { |c| "#{c.name} (Civilian)" }
-          (@setup_log ||= []) << "Starting alignment tokens - #{tokens.join(', ')}."
+          (@setup_log ||= []) << "Starting corporation alignment tokens: #{tokens.join(', ')}."
           flush_setup_log!
         end
 
-        SETUP_LOG_RULE = '------------------ SETUP --------------------------'
-        SETUP_LOG_END = '------------------------------------------------------'
+        SETUP_LOG_RULE = "#{'-' * 26} SETUP #{'-' * 27}"
+        SETUP_LOG_END = '-' * 60
 
         # A linha da Fase e emitida em init_phase, antes dos sorteios do setup
         # (que nao podem mudar de ordem). Entao o bloco SETUP e inserido no @log
-        # imediatamente antes dela. @log e reconstruido do zero a cada replay/undo.
+        # logo depois dela, seguido de uma copia da mesma linha. @log e
+        # reconstruido do zero a cada replay/undo.
         def flush_setup_log!
           lines = [SETUP_LOG_RULE, *@setup_log, SETUP_LOG_END].map { |m| Engine::GameLog::Entry.new(m, nil) }
           @setup_log = []
-          idx = @log.index { |e| e.message.to_s.start_with?('-- Phase ') } || @log.size
-          @log.insert(idx, *lines)
+          idx = @log.index { |e| e.message.to_s.start_with?('-- Phase ') }
+          return @log.insert(@log.size, *lines) unless idx
+
+          phase = @log[idx]
+          @log.insert(idx + 1, *lines, Engine::GameLog::Entry.new(phase.message, phase.action_id))
         end
 
         # A ficha inicial de apoio civil/militar de uma companhia (18Junta
