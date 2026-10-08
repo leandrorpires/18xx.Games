@@ -1222,17 +1222,22 @@ module Engine
         SETUP_LOG_END = '-' * 60
 
         # A linha da Fase e emitida em init_phase, antes dos sorteios do setup
-        # (que nao podem mudar de ordem). Entao o bloco SETUP e inserido no @log
-        # logo depois dela, seguido de uma copia da mesma linha. @log e
-        # reconstruido do zero a cada replay/undo.
+        # (que nao podem mudar de ordem). Aqui ela e retirada do @log e
+        # reacrescentada no fim, em sequencia, junto do bloco SETUP:
+        # Fase, SETUP, Fase. So @log << (como o resto do motor), sem insert em
+        # indice: a tela do log agrupa por action_id e no Opal o insert nao
+        # manteve a ordem.
         def flush_setup_log!
-          lines = [SETUP_LOG_RULE, *@setup_log, SETUP_LOG_END].map { |m| Engine::GameLog::Entry.new(m, nil) }
+          lines = @setup_log
           @setup_log = []
           idx = @log.index { |e| e.message.to_s.start_with?('-- Phase ') }
-          return @log.insert(@log.size, *lines) unless idx
+          phase_text = idx ? @log.delete_at(idx).message : nil
 
-          phase = @log[idx]
-          @log.insert(idx + 1, *lines, Engine::GameLog::Entry.new(phase.message, phase.action_id))
+          @log << phase_text if phase_text
+          @log << SETUP_LOG_RULE
+          lines.each { |line| @log << line }
+          @log << SETUP_LOG_END
+          @log << phase_text if phase_text
         end
 
         # A ficha inicial de apoio civil/militar de uma companhia (18Junta
