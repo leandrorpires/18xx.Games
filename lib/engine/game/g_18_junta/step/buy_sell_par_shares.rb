@@ -27,9 +27,9 @@ module Engine
               valid = get_par_prices(action.entity, action.corporation)
               unless price && valid.any? { |p| p.price == price.price && p.coordinates == price.coordinates }
                 fixed = @game.fixed_par_price_for(action.corporation)
-                raise GameError, "#{action.corporation.name} tem o preço de Oferta Inicial fixado em "\
-                                 "#{@game.format_currency(fixed.price)} (privada (A))" if fixed
-                raise GameError, "Preço de abertura inválido: #{price ? @game.format_currency(price.price) : 'nenhum'}"
+                raise GameError, "#{action.corporation.name} has its par price fixed at "\
+                                 "#{@game.format_currency(fixed.price)} (Private (A))" if fixed
+                raise GameError, "Invalid par price: #{price ? @game.format_currency(price.price) : 'none'}"
               end
             end
 

@@ -21,7 +21,7 @@ module Engine
           SKIP_CHOICE = 'skip'
 
           def description
-            'Privada (A): Fixar Preço de Oferta Inicial'
+            'Private (A): Fix Par Price'
           end
 
           def actions(entity)
@@ -45,13 +45,13 @@ module Engine
           end
 
           def choice_name
-            'Habilidade Privada (A): Deseja arbitrar o preço de Oferta Inicial de alguma companhia não pareada?'
+            'Private (A) ability: do you want to fix the par price of a company that has not yet sold any shares?'
           end
 
           def choices
             {
-              USE_CHOICE => 'Sim',
-              SKIP_CHOICE => 'Não',
+              USE_CHOICE => 'Yes',
+              SKIP_CHOICE => 'No',
             }
           end
 
@@ -76,7 +76,7 @@ module Engine
           def process_par(action)
             corporation = action.corporation
             share_price = action.share_price
-            raise GameError, "#{corporation.name} não pode ser fixada (já pareada)" if corporation.ipoed
+            raise GameError, "#{corporation.name} cannot have its par price fixed (already started)" if corporation.ipoed
 
             @game.use_private_a!(corporation, share_price)
             @round.private_a_resolved = true

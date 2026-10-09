@@ -10,9 +10,8 @@ module Engine
             sym: '(A)',
             value: 35,
             revenue: 15,
-            desc: 'Uma vez por partida, o jogador proprietário pode, no início de uma Fase de Mercado, fixar '\
-                  'antecipadamente o valor do preço de Oferta Inicial de alguma companhia que não teve nenhuma ação '\
-                  'adquirida até aquele momento.',
+            desc: 'Once per game, at the start of a Stock Round, the owner may fix the par price of a ' \
+                  'company that has not yet sold any shares.',
             color: nil,
             meta: { present: false },
           },
@@ -21,9 +20,8 @@ module Engine
             sym: '(B)',
             value: 40,
             revenue: 10,
-            desc: 'Uma vez por partida, a companhia proprietária pode, na etapa de construção de trilhos, além de '\
-                  'colocar um trilho normal, construir o trilho especial "Laguna" (E11), sem pagar nenhum custo por '\
-                  'isto, mesmo que a companhia não tenha acesso àquele hexágono.',
+            desc: 'Once per game, the owning company may lay the Laguna tile (E11) for free, in addition to ' \
+                  'its normal Track action and without needing a route to the hex.',
             color: nil,
             meta: { present: false },
             abilities: [
@@ -44,9 +42,9 @@ module Engine
             sym: '(C)',
             value: 45,
             revenue: 10,
-            desc: 'Sempre que a companhia proprietária for construir um trilho em um local com paramilitares, ela '\
-                  'pode fazê-lo sem pegar a ficha, descartando-a do jogo. Nesse caso, a companhia não pagará o custo '\
-                  'de $30, nem haverá qualquer mudança na trilha de estabilidade política.',
+            desc: 'When the owning company lays a tile in a hex with a paramilitary token, it may ' \
+                  'discard that token without choosing a side. If it does, the Political Track marker ' \
+                  'does not move and no corruption token is drawn.',
             color: nil,
             meta: { present: false },
           },
@@ -55,9 +53,9 @@ module Engine
                 sym: '(D)',
                 value: 50,
                 revenue: 5,
-                desc: 'Uma vez por partida, na hora de comprar um trem da oferta, a companhia proprietária pode descartar um trem '\
-                      '2 ou 3, e receber o valor de custo do trem descartado como desconto na compra do trem atual de maior valor, '\
-                      'pagando apenas a diferença de valor entre eles.',
+                desc: 'Once per game, when buying a train from the supply, the owning company may discard a 2- ' \
+                  'or 3-train and pay only the difference in price. The new train must cost more than the ' \
+                  'discarded one.',
                 color: nil,
                 meta: { present: false },
                 abilities: [
@@ -76,8 +74,10 @@ module Engine
               sym: '(E)',
               value: 55,
               revenue: 10,
-              desc: 'A partir da Fase 3, o jogador proprietário, em vez de vender essa empresa privada, pode doá-la '\
-                    'para uma companhia, que receberá $150 do banco. A empresa continua ativa e gerando receita.',
+              desc: 'From the purchase of the first 3-train, the owner may donate this Private Company to a ' \
+                  'company they preside over, instead of selling it. The bank gives that company $150, and ' \
+                  'the Private Company keeps paying its revenue to that company. The owner receives no ' \
+                  'compensation.',
               color: nil,
               meta: { present: false },
               abilities: [
@@ -104,8 +104,8 @@ module Engine
             sym: '(F)',
             value: 60,
             revenue: 10,
-            desc: 'Na etapa de construção de trilhos, a companhia proprietária pode construir um trilho amarelo '\
-                  'extra, pagando um custo adicional de $25 (mais eventuais custos de terreno).',
+            desc: 'Once per Operating Round, the owning company may make an additional yellow tile lay for ' \
+                  '$25 plus terrain costs. Normal tile placement rules apply to it.',
             color: nil,
             meta: { present: false },
               #Sugestão do Claude implementada por Leandro 20-09-26
@@ -126,8 +126,8 @@ module Engine
             sym: '(G)',
             value: 65,
             revenue: 10,
-            desc: 'Durante as rodadas de operação, ao calcular o alcance e receita de suas rotas, a companhia '\
-                  'proprietária pode ignorar a contagem de hexágonos de vila, para um ou mais de seus trens.',
+            desc: "Towns do not count toward the range of the owning company's trains, but they still count " \
+                  'for revenue.',
             color: nil,
             meta: { present: false },
           },
@@ -136,8 +136,8 @@ module Engine
             sym: '(H)',
             value: 70,
             revenue: 15,
-            desc: 'Sempre que a companhia proprietária pagar dividendos em valor igual ou maior que o dobro de seu '\
-                  'valor de mercado, o banco paga 10% extra diretamente para o caixa da companhia.',
+            desc: 'When the owning company pays a high dividend (at least twice its share price), the bank ' \
+                  "adds 10% of the dividend to the company's treasury.",
             color: nil,
             meta: { present: false },
           },
@@ -146,8 +146,8 @@ module Engine
             sym: '(I)',
             value: 75,
             revenue: 20,
-            desc: 'No momento da resolução do golpe, a companhia proprietária pode descartar uma de suas fichas de '\
-                  'apoio/rejeição ao golpe.',
+            desc: 'During coup resolution, before the tokens are counted, the owning company may discard one of ' \
+                  'its alignment tokens.',
             color: nil,
             meta: { present: false },
           },
@@ -156,9 +156,8 @@ module Engine
             sym: '(J)',
             value: 80,
             revenue: 20,
-            desc: 'Na etapa de construção de trilhos, a companhia proprietária sempre recebe um desconto para '\
-                  'construir em montanhas (-$25) e fazendas (-$15). No caso das fazendas, o desconto também se '\
-                  'aplica aos melhoramentos de trilhos.',
+            desc: 'The owning company gets a $25 discount on mountains and a $15 discount on farms, ' \
+                  'including farm upgrades.',
             abilities: [
               { type: 'tile_discount', discount: 25, terrain: 'mountain', owner_type: 'corporation', exact_match: false },
               { type: 'tile_discount', discount: 15, terrain: 'farm', owner_type: 'corporation', exact_match: false },
@@ -171,8 +170,9 @@ module Engine
             sym: '(K)',
             value: 85,
             revenue: 5,
-            desc: 'Sempre que o presidente da companhia proprietária receber uma ficha preta de corrupção, ela é '\
-                  'automaticamente trocada por outra ficha sorteada do saco (que é mantida, mesmo se também for preta).',
+            desc: 'Whenever the president of the owning company receives a black corruption token, it is ' \
+                  'automatically swapped for another token drawn from the bag (which is kept, even if also ' \
+                  'black).',
             color: nil,
             meta: { present: :never },
           },
@@ -181,20 +181,31 @@ module Engine
             sym: '(L)',
             value: 150,
             revenue: 40,
-            desc: 'Esta empresa privada nunca poderá ser vendida para uma companhia.',
+            desc: 'Can never be bought by a Public Company.',
             color: nil,
             meta: { present: false },
             # Sugestão do Claude implantada por Leandro 19-09-26
             abilities: [{ type: 'no_buy' }],
           },
           {
+            name: '(M) Sociedade Caja Negra',
+            sym: '(M)',
+            value: 40,
+            revenue: 5,
+            desc: 'Once per Stock Round, on its owner\'s turn, the owner may draw 1 corruption token from the bag ' \
+                  'and receive $5 times the current phase number from the bank. This does not use up the ' \
+                  'owner\'s turn.',
+            color: nil,
+            meta: { present: false },
+          },
+          {
             name: '(N) Emisarios de las Sombras',
             sym: '(N)',
             value: 60,
             revenue: 15,
-            desc: 'Uma vez por partida, durante uma ação de sua companhia proprietária, pode remover 1 ficha de '\
-                  'paramilitar de qualquer hexágono do tabuleiro. Ao fazer '\
-                  'isso, o presidente da companhia pega 2 fichas pretas de corrupção diretamente do estoque.',
+            desc: 'Once per game, during its operating turn, the owning company may remove 1 paramilitary ' \
+                  "token from any hex on the board. When doing so, the company's president takes 2 black " \
+                  'corruption tokens directly from the stock.',
             color: nil,
           meta: { present: false },
           abilities: [

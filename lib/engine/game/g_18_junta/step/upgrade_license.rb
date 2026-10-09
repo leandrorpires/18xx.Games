@@ -23,7 +23,7 @@ module Engine
           # quando blocks? virou true. Definido aqui também, por
           # segurança, caso isso mude no futuro.
           def description
-            'Licença de Aprimoramento'
+            'Upgrade License'
           end
 
           def actions(entity)
@@ -47,17 +47,17 @@ def log_skip(_entity); end
 
 
           def choice_name
-            'Licença de Aprimoramento'
+            'Upgrade License'
           end
 
           def choices
-            { 'license' => 'Obter licença de aprimoramento (grátis; só vale na próxima rodada de operação)' }
+            { 'license' => 'Get an Upgrade License (free; only valid in the next Operating Round)' }
           end
 
           def process_choose(action)
             entity = action.entity
             @game.grant_upgrade_license!(entity)
-            @log <<"#{entity.name} obtém uma licença de aprimoramento para a próxima rodada de operação"
+            @log <<"#{entity.name} gets an Upgrade License for the next Operating Round"
             pass!
           end
         end

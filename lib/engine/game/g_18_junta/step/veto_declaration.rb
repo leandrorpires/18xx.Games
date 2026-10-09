@@ -54,9 +54,9 @@ module Engine
             return '' unless corp
 
             if @game.pending_veto_response_for?(corp)
-              "#{corp.name}: aceitar o veto ao hexágono #{@game.pending_veto_hex(corp)}?"
+              "#{corp.name}: accept the veto on hex #{@game.pending_veto_hex(corp)}?"
             else
-              "#{corp.name}: acionista minoritário quer vetar algum hexágono nesta rodada?"
+              "#{corp.name}: does a minority shareholder want to veto a hex this Operating Round?"
             end
           end
 
@@ -66,13 +66,13 @@ module Engine
 
             if @game.pending_veto_response_for?(corp)
               {
-                ACCEPT_CHOICE => 'Aceitar o veto (hexágono bloqueado; quem vetou recebe 1 ficha preta)',
-                REJECT_CHOICE => 'Recusar o veto (companhia age normalmente; presidente recebe 1 ficha preta)',
+                ACCEPT_CHOICE => 'Accept the veto (hex blocked; the declarer receives 1 black token)',
+                REJECT_CHOICE => 'Refuse the veto (company acts normally; the president receives 1 black token)',
               }
             else
               hexes = @game.veto_target_hexes(corp)
-              hex_choices = hexes.to_h { |hex| [hex.id, "Vetar construção/estação em #{hex.id}"] }
-              hex_choices.merge(PASS_CHOICE => 'Não vetar')
+              hex_choices = hexes.to_h { |hex| [hex.id, "Veto track/station at #{hex.id}"] }
+              hex_choices.merge(PASS_CHOICE => 'Do not veto')
             end
           end
 

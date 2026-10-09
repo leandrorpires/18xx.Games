@@ -23,7 +23,7 @@ module Engine
           def choices_ability(entity)
             case entity.sym
             when '(N)'
-              @game.remaining_paramilitar_hexes.to_h { |hex_id| [hex_id, "Remover ficha em #{hex_id}"] }
+              @game.remaining_paramilitar_hexes.to_h { |hex_id| [hex_id, "Remove token at #{hex_id}"] }
             when '(D)'
               corporation = entity.owner
               target = @game.depot.min_depot_train
@@ -36,15 +36,15 @@ module Engine
                 next [old_train.id, nil] unless target.price > old_train.price
 
                 final_price = [target.price - old_train.price, 0].max
-                [old_train.id, "Descartar #{old_train.name} para comprar #{target.name} por "\
-                                "#{@game.format_currency(final_price)} (em vez de "\
+                [old_train.id, "Discard #{old_train.name} to buy #{target.name} for "\
+                                "#{@game.format_currency(final_price)} (instead of "\
                                 "#{@game.format_currency(target.price)})"]
               end.compact
             when '(E)'
               corporation = current_entity
               return {} unless @game.private_e_donatable?(corporation)
 
-              { 'donate' => "Doar para #{corporation.name} (recebe #{@game.format_currency(150)} do banco)" }
+              { 'donate' => "Donate to #{corporation.name} (receives #{@game.format_currency(150)} from the bank)" }
             else
               {}
             end

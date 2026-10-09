@@ -46,8 +46,8 @@ module Engine
             return unless bonus.positive?
 
             @game.bank.spend(bonus, entity)
-            @log << "A Cia #{entity.name} recebe #{@game.format_currency(bonus)} extras do banco por pagar altos dividendos "\
-                    '[privada (H) Muñoz Investimentos].'
+            @log << "#{entity.name} receives #{@game.format_currency(bonus)} extra from the bank for paying a high dividend "\
+                    '[Private (H) Muñoz Investimentos].'
           end
         end
       end

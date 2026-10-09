@@ -23,7 +23,7 @@ module Engine
           # quando blocks? virou true. Definido aqui também, por
           # segurança, caso isso mude no futuro.
           def description
-            'Privada (N): Remover Ficha de Paramilitar'
+            'Private (N): Remove Paramilitary Token'
           end
 
           def actions(entity)
@@ -44,12 +44,12 @@ def log_skip(_entity); end
           # end
 
           def choice_name
-            'Emisarios de las Sombras: remover ficha de paramilitar (1x por partida)'
+            'Emisarios de las Sombras: remove paramilitary token (once per game)'
           end
 
           def choices
-            hex_choices = @game.remaining_paramilitar_hexes.to_h { |hex_id| [hex_id, "Remover ficha em #{hex_id}"] }
-            hex_choices.merge(SKIP_CHOICE => 'Não usar agora')
+            hex_choices = @game.remaining_paramilitar_hexes.to_h { |hex_id| [hex_id, "Remove token at #{hex_id}"] }
+            hex_choices.merge(SKIP_CHOICE => 'Do not use now')
           end
 
           def process_choose(action)

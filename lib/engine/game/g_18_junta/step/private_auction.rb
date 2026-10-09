@@ -27,7 +27,7 @@ module Engine
           attr_reader :companies
 
           def description
-            'Leilão das Empresas Privadas'
+            'Private Company Auction'
           end
 
           def available
@@ -100,7 +100,7 @@ module Engine
               pass_auction(entity)
               resolve_bids
             else
-              @log << "#{entity.name} passa a escolha do leilão"
+              @log << "#{entity.name} passes the auction choice"
 
               # Uma volta completa da mesa sem ninguém iniciar um leilão
               # normal: dá a cada jogador, em ordem de turno A PARTIR de
@@ -116,15 +116,15 @@ module Engine
               if @consecutive_choosing_passes < entities.size
                 @round.next_entity_index!
               elsif @forced_round
-                @log << 'Nenhum jogador quis iniciar outro leilão — as empresas privadas remanescentes saem do jogo'
+                @log << 'No player wanted to start another auction — the remaining Private Companies are removed from the game'
                 @companies.each { |c| @game.remove_company(c) }
                 @companies = []
               else
                 @forced_round = true
                 @consecutive_choosing_passes = 0
                 @round.next_entity_index!
-                @log << "#{entities[entity_index].name} pode abrir um leilão por pelo menos metade do valor de uma "\
-                        'privada remanescente'
+                @log << "#{entities[entity_index].name} may open an auction for at least half the value of a "\
+                        'remaining Private Company'
               end
             end
           end
@@ -132,7 +132,7 @@ module Engine
           def process_bid(action)
             # rev. 2.8 (decisão do designer): todos os lances são múltiplos de $5.
             if @game.rev_2_8? && (action.price % 5).nonzero?
-              raise GameError, 'Os lances devem ser múltiplos de $5'
+              raise GameError, 'Bids must be a multiple of $5'
             end
 
             action.entity.unpass!
@@ -144,7 +144,7 @@ module Engine
               was_forced = @forced_round
               selection_bid(action)
               @forced_round = false
-              @log << "#{action.entity.name} usa o leilão com desconto (metade do valor)" if was_forced
+              @log << "#{action.entity.name} uses the discount auction (half value)" if was_forced
             end
           end
 
@@ -162,7 +162,7 @@ module Engine
 
           def add_bid(bid)
             super
-            @log << "#{bid.entity.name} dá lance de #{@game.format_currency(bid.price)} por #{bid.company.name}"
+            @log << "#{bid.entity.name} bids #{@game.format_currency(bid.price)} for #{bid.company.name}"
           end
 
 
@@ -176,7 +176,7 @@ module Engine
               company.owner = player
               player.companies << company
               player.spend(price, @game.bank) if price.positive?
-              @log << "#{player.name} vence o leilão de #{company.name} por #{@game.format_currency(price)}"
+              @log << "#{player.name} wins the auction for #{company.name} with a bid of #{@game.format_currency(price)}"
 
               @companies.delete(company)
               winner_index = entities.index(player) || 0
